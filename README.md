@@ -27,6 +27,15 @@ The editable install is what makes `import jax_rheology` work from outside the r
 `jax-cfd`, `jax_ib`, and `diff_rheo` trees are used in place rather than installed, and the package adds
 them to `sys.path` on first use, so keep the checkout where it is.
 
+## System requirements
+
+Linux x86-64 (developed and tested on Harvard FASRC, Rocky Linux 8; any Linux with conda
+should work — macOS and Windows are untested). Python 3.11, with all dependency versions
+pinned in the two environment files; these are the exact versions used to produce the paper
+results. GPU runs use the pinned CUDA build of jaxlib; production training used an NVIDIA
+A100-SXM4-80GB. No GPU is needed for the examples or the quick verification level, which
+run on CPU. Typical install time on a normal desktop: ~15 minutes.
+
 ## Quickstart
 
 ```python
@@ -42,6 +51,9 @@ trajectory = sim.run()
 
 See [`examples/`](examples/) for forward simulation, TBNN training, and running a full experiment from a
 config file. 
+
+Each example runs at reduced scale, completes in ~30 s–2 min on a laptop CPU, prints its
+loss/summary values to stdout, and writes its outputs under `work/`.
 
 ## Where output goes
 
@@ -77,18 +89,6 @@ model-selection, and bundle comparisons, which need the deposited data, and the 
 a GPU and run through two batch jobs. Anything whose data or hardware is absent skips with a line saying
 what it wanted, so the suite is runnable anywhere; [`REPRODUCE.md`](REPRODUCE.md) lists the variables that
 turn the skips into runs.
-
-Each example runs at reduced scale, completes in ~[30 s–2 min] on a laptop CPU, prints its
-loss/summary values to stdout, and writes its outputs under `work/`.
-
-## System requirements
-
-Linux x86-64 (developed and tested on Harvard FASRC, Rocky Linux 8; any Linux with conda
-should work — macOS and Windows are untested). Python 3.11, with all dependency versions
-pinned in the two environment files; these are the exact versions used to produce the paper
-results. GPU runs use the pinned CUDA build of jaxlib; production training used an NVIDIA
-A100-SXM4-80GB. No GPU is needed for the examples or the quick verification level, which
-run on CPU. Typical install time on a normal desktop: ~15 minutes.
 
 ## Citation
 
