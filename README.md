@@ -78,6 +78,18 @@ a GPU and run through two batch jobs. Anything whose data or hardware is absent 
 what it wanted, so the suite is runnable anywhere; [`REPRODUCE.md`](REPRODUCE.md) lists the variables that
 turn the skips into runs.
 
+Each example runs at reduced scale, completes in ~[30 s–2 min] on a laptop CPU, prints its
+loss/summary values to stdout, and writes its outputs under `work/`.
+
+## System requirements
+
+Linux x86-64 (developed and tested on Harvard FASRC, Rocky Linux 8; any Linux with conda
+should work — macOS and Windows are untested). Python 3.11, with all dependency versions
+pinned in the two environment files; these are the exact versions used to produce the paper
+results. GPU runs use the pinned CUDA build of jaxlib; production training used an NVIDIA
+A100-SXM4-80GB. No GPU is needed for the examples or the quick verification level, which
+run on CPU. Typical install time on a normal desktop: ~15 minutes.
+
 ## Citation
 
 If you use this repository, please cite the paper:
