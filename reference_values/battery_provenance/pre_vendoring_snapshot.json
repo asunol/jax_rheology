@@ -1,0 +1,344 @@
+{
+  "_note": "Superseded. Recorded against the pre-vendoring external diff_rheo checkout at 873835213502533712c5d24cdd786fae71840ec6, before the tree was vendored into this repository; kept for provenance only and not compared against. The live record is start_snapshot.json.",
+  "head": "873835213502533712c5d24cdd786fae71840ec6",
+  "status": " M pyproject.toml\n M src/diff_rheo/models/_generalized_newtonian.py\n?? convert_tbnn_pickle.py\n?? model_selection_batch_results.txt\n?? model_selection_batch_results_clean.txt\n?? model_selection_tbnn.ipynb\n?? model_selection_tbnn.py\n?? run_batch_model_selection.py\n?? scripts/results_l2/CarreauYasuda_estimation_error.png\n?? scripts/results_l2/CarreauYasuda_parameter_space.png\n?? scripts/results_l2/Giesekus_estimation_error.png\n?? scripts/results_l2/Giesekus_parameter_space.png\n?? scripts/results_l2/LinearPTT_estimation_error.png\n?? scripts/results_l2/LinearPTT_parameter_space.png\n?? scripts/results_l2/Newtonian_estimation_error.png\n?? scripts/results_l2/Newtonian_parameter_space.png\n?? scripts/results_l2/OldroydB_estimation_error.png\n?? scripts/results_l2/OldroydB_parameter_space.png\n?? scripts/results_l2/identification_summary.png\n?? tbnn_and_fitted_models.png\n?? tbnn_stress_strain_curve.png\n?? tbnn_stress_vs_time.png\n",
+  "diff_sha256": "15458fbb22f5431e15d1b9b883d6e930cbca333a5b1b958eea61d2a59739d80a",
+  "diff_bytes": 2701,
+  "untracked": [
+    {
+      "path": "convert_tbnn_pickle.py",
+      "sha256": "86d071f1c5a0167c7638f5da433ee29adce95453a15833bacbdbc0458e090ee9",
+      "size": 8897,
+      "classification": "importable_code",
+      "importable_python_flag": true
+    },
+    {
+      "path": "model_selection_batch_results.txt",
+      "sha256": "feb9a32d15e9ebd4056b4c0ff0d821ad719df5f02dabbd9b0e76184c6167bf83",
+      "size": 159812,
+      "classification": "result_or_data_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "model_selection_batch_results_clean.txt",
+      "sha256": "9ea085a3796263cbf091e295b069a50a4f0d10e0c87b7b3119bc8758ed62b988",
+      "size": 12273,
+      "classification": "result_or_data_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "model_selection_tbnn.ipynb",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "classification": "notebook_code_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "model_selection_tbnn.py",
+      "sha256": "6fc5f99f0332a58416909397ce3b929e67c190f8b6a820c78eb084c8fd390417",
+      "size": 79518,
+      "classification": "importable_code",
+      "importable_python_flag": true
+    },
+    {
+      "path": "run_batch_model_selection.py",
+      "sha256": "6b73bcd69ddf2312dabc7c7f4434d173753759eb9bb704e4c6a45898221a2f99",
+      "size": 6736,
+      "classification": "importable_code",
+      "importable_python_flag": true
+    },
+    {
+      "path": "scripts/results_l2/CarreauYasuda_estimation_error.png",
+      "sha256": "266855d5e8b8eba23868f4113d11994bc05b389ea6fd0fbfc2a3aaf08cf2891d",
+      "size": 93205,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/CarreauYasuda_parameter_space.png",
+      "sha256": "5816d8ce9549111e189b133d58b67ff4fcdc289aa352abcee2c43e405f74021c",
+      "size": 107009,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/Giesekus_estimation_error.png",
+      "sha256": "2ab5a3935c9d981eac5eb28fd67dd5d3647dbad7477bc136f1adb8c51e89cd2b",
+      "size": 80264,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/Giesekus_parameter_space.png",
+      "sha256": "5c4247df663013e932cc8496d6242f2ecdc55ca2b4c1a888cc92c50f2c1ee058",
+      "size": 105788,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/LinearPTT_estimation_error.png",
+      "sha256": "a3061fa90e82590cabb779b87a0fa265678f70f493edf124c42e9925d93513a8",
+      "size": 91571,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/LinearPTT_parameter_space.png",
+      "sha256": "0425340fd3cbc8842dda9b1fa072aa7bdc0e5d64e09fa60ffb2cce438cae311c",
+      "size": 142309,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/Newtonian_estimation_error.png",
+      "sha256": "f10e5aa3ba9c175cadddcf5631d125c48e507f00c2136541a0b78b2f5269338f",
+      "size": 42864,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/Newtonian_parameter_space.png",
+      "sha256": "e4a8b64bf4085a51ae771bc36c6b9f558cbfb16dcc447d9f409c233206d0ac3d",
+      "size": 46926,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/OldroydB_estimation_error.png",
+      "sha256": "b5a23fabab1f876a4d79900116a105232df4c1119d205994ff65ff6f3061ec7c",
+      "size": 63732,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/OldroydB_parameter_space.png",
+      "sha256": "c811fc1abd278e39a18583a88148590d59bac878b5ec32293aa3827a0ae3375c",
+      "size": 89463,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "scripts/results_l2/identification_summary.png",
+      "sha256": "ec8540f2a0202dd9584fa0400e91befc1ae0a4f42c591901d675c35fe2129e0a",
+      "size": 82554,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "tbnn_and_fitted_models.png",
+      "sha256": "ceccac8f2e5c96d9ce31f6a78f6f6dfa23df3547de2cff96b2811629a06c4402",
+      "size": 728789,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "tbnn_stress_strain_curve.png",
+      "sha256": "db456ac70c0a6de07c88036cd5d997843e2cda73100fe86d467100c7ac6cae9c",
+      "size": 357484,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    },
+    {
+      "path": "tbnn_stress_vs_time.png",
+      "sha256": "7ea61a622bae466e8a1d1ce99f2dad2b806685b41eb29c494e32bb61341ba014",
+      "size": 200328,
+      "classification": "generated_plot_artifact",
+      "importable_python_flag": false
+    }
+  ],
+  "python": [
+    {
+      "path": "convert_tbnn_pickle.py",
+      "sha256": "86d071f1c5a0167c7638f5da433ee29adce95453a15833bacbdbc0458e090ee9",
+      "size": 8897,
+      "tracked": false
+    },
+    {
+      "path": "model_selection_tbnn.py",
+      "sha256": "6fc5f99f0332a58416909397ce3b929e67c190f8b6a820c78eb084c8fd390417",
+      "size": 79518,
+      "tracked": false
+    },
+    {
+      "path": "run_batch_model_selection.py",
+      "sha256": "6b73bcd69ddf2312dabc7c7f4434d173753759eb9bb704e4c6a45898221a2f99",
+      "size": 6736,
+      "tracked": false
+    },
+    {
+      "path": "scripts/analysis.py",
+      "sha256": "e8ae9d301b47cbefcd1e698a17aef7a994df6ef75332bfb96b135736e92311fb",
+      "size": 9613,
+      "tracked": true
+    },
+    {
+      "path": "scripts/generate_random_data.py",
+      "sha256": "82f5efb560cd8dcba7dd913dfbd66b95e9fb94c293c294ab396d79341f9c4aa5",
+      "size": 13336,
+      "tracked": true
+    },
+    {
+      "path": "scripts/giesekus_fit.py",
+      "sha256": "a8bd13dd11bd266c1f9432af08a2a1163a02c8efe2b3c4ab3a7a4f582659dafa",
+      "size": 5408,
+      "tracked": true
+    },
+    {
+      "path": "scripts/sample_variational_fit.py",
+      "sha256": "61ac2a9ec626b8f997683c68127fc67a7a18d019e4e61308eef48d7b79c65077",
+      "size": 2906,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/__init__.py",
+      "sha256": "6310555b5ba7ea763b31c123a71482a686674c099ddf5d361de4bd4bc2a8180b",
+      "size": 811,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_core.py",
+      "sha256": "e25e02e163038a7396c24fd4b86623810ce8a39f58abd953eab3ce6f315eb710",
+      "size": 10249,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_data_types.py",
+      "sha256": "6ec4bb012b5614fb63553e8b83f0a08903291dbad818c1695c60ad87c059c661",
+      "size": 3213,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_fitting.py",
+      "sha256": "065a5722aa23af3e998de0c0b3d505a0f89179488d85b6aaa3b3369a93955f0f",
+      "size": 1953,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_forcing.py",
+      "sha256": "fc7eba3331087ca34066a1f5c482395f69cd94aad417b64f155d1e528ffecf2d",
+      "size": 5082,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_protocols.py",
+      "sha256": "e5833a6a3044f74386af367e58592238bbe56d19aa9acea8a6c9709f6a3a2199",
+      "size": 2959,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_rheometer.py",
+      "sha256": "29332117380917b5bf86695285c9a639855c6e8a139219a37c0121808dff3cab",
+      "size": 2646,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_solver.py",
+      "sha256": "e775e5f0deb189f3d6277e79aff954298420ec22ca8b5597e0da2168a6401c01",
+      "size": 1987,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_utils.py",
+      "sha256": "d0b43cbd91ac409cd70389a9e0cd49f8d56e3bbc550c1a0f8d0b2a0899a83c1a",
+      "size": 2915,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/__init__.py",
+      "sha256": "363e850c6bde92ced68bf76692bc5ee843a351dab21d12c7fd15489fea490444",
+      "size": 631,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_constitutive_model.py",
+      "sha256": "fdf2812fb42854c6264b095c38ed58d0bcdf597620cda118b7d8ecf80c0e85ce",
+      "size": 4494,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_generalized_newtonian.py",
+      "sha256": "967765e585e3d50f2fda8ee9c73f7f0625354afbb5ea7d64fa3de603a5f15c63",
+      "size": 3453,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_rude.py",
+      "sha256": "3a80f0570f6068978aaceb0e301226cc64556f6d2979ebb727023fc9788d5600",
+      "size": 3738,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_viscoelastic.py",
+      "sha256": "385688a6ae18cf18a1bca6224fa297a54e92599bcf778776fe50e99cd63056c9",
+      "size": 52386,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/parameters.py",
+      "sha256": "eea67266d08e3a5fdec95105c467cad8c8dcc50d533ba7f81afe16db332ac554",
+      "size": 3628,
+      "tracked": true
+    },
+    {
+      "path": "tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "tracked": true
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "fe08e9298d42b92b20708a8fe3e1b2d42146ba1edf23604acbd8c4f8337efb08",
+      "size": 3063,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_constitutive_models.py",
+      "sha256": "a0daab4f2e7daab57fbfff4aac0ed9e4cda75dd8ba8a53b1ff08815fe6d86b2b",
+      "size": 2996,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_forcing.py",
+      "sha256": "33a4d290958b376775b0fb6ae30020ba30b5e54af512b3155a1dabd7128e90f9",
+      "size": 7521,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_parameters.py",
+      "sha256": "324b212a5ea2b4ba268a10c116917080675ba0427919c2745818817eae2079b5",
+      "size": 3454,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_protocols.py",
+      "sha256": "bf35426c4fa12158a68366a8534af1b160788a7c0b48c823ccab10dca387b525",
+      "size": 9534,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_rheometer.py",
+      "sha256": "7f90dd85d637dfe0408e5f3953ae49d798e7f9a1e6034770975c0f244e4e47a5",
+      "size": 9839,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_solver.py",
+      "sha256": "c10cf8ee07822b8da8ae2c20b8a75928299e1866d0c26016f96192a82a635d58",
+      "size": 3575,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_viscoelastic_models.py",
+      "sha256": "7a34e2e3647e802360863369e1d2ab0363a861f8cffbaa3705fca0769d773e4d",
+      "size": 11167,
+      "tracked": true
+    },
+    {
+      "path": "tests/utils.py",
+      "sha256": "272744d720eda0b246050cdb241e2b8104b3589ff2358f5b7ba306ef4a7f2545",
+      "size": 2539,
+      "tracked": true
+    }
+  ],
+  "production_battery_sha256": "00402232fae4bea6affc9da7700100576a37b39097d81db98ced5355857e7c94"
+}

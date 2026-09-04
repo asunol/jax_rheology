@@ -1,0 +1,6 @@
+# BIC battery in list mode: enumerate the fit targets without running them.
+# Runs campaigns/battery/tbnn_bic_final_battery.py; see the Supplementary Fig. S12 row of REPRODUCE.md.
+# x64 true is required: the battery asserts CPU float64.
+experiment: battery
+x64: true
+mode: list

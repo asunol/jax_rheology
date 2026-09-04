@@ -1,0 +1,41 @@
+# Elastoviscoplastic channel training on geometry A across three drive rates.
+# historical campaign: evp_A_3lam_agn
+# Seeds 2-5 reuse this config with --seed/--theta-seed; see the Fig. 6 row of REPRODUCE.md.
+# x64 true is required by the EVP trainer. Override the drive list with --g-x-list, not --g-x.
+experiment: evp_train
+x64: true
+geometry: channel
+g_x_list: "1.8,2.5,4.0"
+outer_steps: 84
+inner_steps: 10
+nx: 32
+ny: 64
+fit_solver_tol: 1.0e-8
+yield_mode: scalar
+targets_json: ./reference_values/evp_targets_geomA_3lam.json
+lambda_q: 221.67146847226445
+no_br_init: true
+truth_gp: 3.2
+truth_lam: 0.7
+truth_nus: 0.8
+truth_tau_y: 1.45
+init: ob
+seed: 0
+theta_seed: 0
+width: 32
+depth: 2
+learning_rate: 5.0e-4
+scalar_lr2: 2.0e-3
+clip: 1.0
+adam_steps_per_kappa: 60
+tail_step_mult: 2
+warmup: 10
+stage1_maxiter: 60
+stage1_ftol: 1.0e-9
+n_shear: 12
+scalar_bound_lo: 0.02
+scalar_bound_hi: 20.0
+kappa_schedule: "1.0,0.3,0.1,0.05,0.02"
+out_dir: ./work/evp_channel
+run_name: evp_fix_A_3lam_agn
+resume: true

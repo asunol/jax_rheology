@@ -1,0 +1,55 @@
+{
+  "label": "phase2f_conformation_local_extension",
+  "upstream": {
+    "url": "https://github.com/JamesRoggeveen/diff_rheo.git",
+    "branch": "nat_coms",
+    "sha": "92d9dada8b0b746e48a50d092d9ab99cc4de1820",
+    "shortsha": "92d9dad",
+    "note": "vendored tree unmodified except additive models/__init__.py export lines and new models/_conformation.py"
+  },
+  "paper_era_pin": {
+    "path": "diff_rheo",
+    "sha": "873835213502533712c5d24cdd786fae71840ec6",
+    "note": "assert_provenance_unchanged still snapshots this git tree"
+  },
+  "local_extension": {
+    "path": "src/diff_rheo/models/_conformation.py",
+    "sha256": "b30b0f30233951d5cd8fc307c5a89111e141f3d903febc5314f5b5328326605a",
+    "size": 4037,
+    "exports": [
+      "FENEPConformation",
+      "ConformationStrainRateProtocol",
+      "peterlin_f"
+    ]
+  },
+  "models_init_additive": {
+    "path": "src/diff_rheo/models/__init__.py",
+    "sha256": "956fa9fea4598a243b9a6c50d310fa8d22623fbf882b2bb2800ca5e0dc445072",
+    "size": 1136,
+    "note": "original nat_coms __all__ line unchanged; local-extension import appended"
+  },
+  "shim": {
+    "path": "fenep_conformation.py",
+    "note": "re-exports diff_rheo.models._conformation"
+  },
+  "candidate_routing": {
+    "FENEPConformation": {
+      "class": "diff_rheo.models._conformation.FENEPConformation",
+      "protocol": "diff_rheo.models._conformation.ConformationStrainRateProtocol",
+      "note": "paper-era optimizer path; battery make_model + make_rheometer"
+    },
+    "FENEP": {
+      "class": "diff_rheo.models._viscoelastic.FENEP",
+      "protocol": "ViscoelasticStrainRateProtocol",
+      "note": "certified-equivalent upstream stress-form reference; not the battery FENE candidate"
+    },
+    "Giesekus": {
+      "class": "diff_rheo.models._viscoelastic.Giesekus",
+      "protocol": "VirtualRheometer.setup / ViscoelasticStrainRateProtocol",
+      "note": "untouched"
+    }
+  },
+  "tbnn_bic_model_selection_py": "not edited (production_battery_sha256)",
+  "phase2d_snapshot": "analysis_phase2_instrument/final_battery/provenance/phase2d_snapshot.json",
+  "written": "2026-08-29"
+}

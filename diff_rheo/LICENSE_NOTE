@@ -1,0 +1,4 @@
+Vendored from JamesRoggeveen/diff_rheo (branch nat_coms @ 92d9dada) and redistributed here with the
+author's permission as part of the paper's combined code release.
+
+Local extension: src/diff_rheo/models/_conformation.py (A.M.S.).

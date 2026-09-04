@@ -1,0 +1,113 @@
+{
+  "healthy": true,
+  "drive_set": "A",
+  "drive_set_values": [
+    1.8,
+    2.5,
+    4.0
+  ],
+  "horizon": "3lam",
+  "lambda0": 221.67146847226445,
+  "lambda0_unweighted": 86.99811552265597,
+  "lambda_q_multiple": 1.0,
+  "lambda_q": 221.67146847226445,
+  "L_vel_init_sum_weighted": 219192.43905489275,
+  "L_vel_init_sum_unweighted": 86025.1852257488,
+  "L_Q_init_sum": 988.8166509002855,
+  "W_max": 38021.78827905293,
+  "cfg": {
+    "Ny": 64,
+    "Nx": 32,
+    "Lx": 1.0,
+    "Ly": 2.0,
+    "outer_steps": 84,
+    "dt": 0.0025,
+    "inner_steps": 10,
+    "solver_tol": 1e-08,
+    "T_final": 2.1,
+    "T_lam": 3.0000000000000004
+  },
+  "truth": {
+    "Gp": 3.2,
+    "lam": 0.7,
+    "nu_s": 0.8,
+    "tau_y": 1.45
+  },
+  "forcings": {
+    "1.8": {
+      "g_x": 1.8,
+      "Q_truth": -0.021016375702632473,
+      "Q_scale": 0.661999647196463,
+      "W_vel": 6450.038198923396,
+      "plug_halfwidth": 0.03125,
+      "y_p_theory": 0.8055555555555555,
+      "yielded_fraction": 0.1875,
+      "any_nan": false,
+      "min_eigA": 0.5583417777270112,
+      "healthy": true,
+      "w_vel": 5.894815985027704,
+      "L_vel_init": 16889.53300470581,
+      "L_vel_init_weighted": 99560.6891357928,
+      "L_Q_init": 941.2790184211009
+    },
+    "2.5": {
+      "g_x": 2.5,
+      "Q_truth": 0.11408442668086065,
+      "Q_scale": 0.9194463070679533,
+      "W_vel": 12690.859395013096,
+      "plug_halfwidth": 0.15625,
+      "y_p_theory": 0.58,
+      "yielded_fraction": 0.40625,
+      "any_nan": false,
+      "min_eigA": 0.49728285119797233,
+      "healthy": true,
+      "w_vel": 2.995997914372425,
+      "L_vel_init": 25298.672575985023,
+      "L_vel_init_weighted": 75794.77027404199,
+      "L_Q_init": 43.47996692682685
+    },
+    "4": {
+      "g_x": 4.0,
+      "Q_truth": 0.4598512380250054,
+      "Q_scale": 1.4754041465665573,
+      "W_vel": 38021.78827905293,
+      "plug_halfwidth": 0.40625,
+      "y_p_theory": 0.3625,
+      "yielded_fraction": 0.625,
+      "any_nan": false,
+      "min_eigA": 0.41099319838140236,
+      "healthy": true,
+      "w_vel": 1.0,
+      "L_vel_init": 43836.97964505797,
+      "L_vel_init_weighted": 43836.97964505797,
+      "L_Q_init": 4.057665552357813
+    }
+  },
+  "br_init": {
+    "Gp0": 2.1690919295707602,
+    "lam0": 1.0,
+    "nu_s0": 0.7230306431902535,
+    "tau_y0": 2.005080781593676,
+    "prov": {
+      "method": "buckingham_reiner",
+      "forcing_hi": 4.0,
+      "forcing_mid": 2.5,
+      "Q_hi": 0.4598512380250054,
+      "Q_mid": 0.11408442668086065,
+      "slope": 0.23051120756276314,
+      "H": 1.0,
+      "beta0": 0.25,
+      "lam0": 1.0,
+      "tau_y_lo": 0.5,
+      "tau_y_hi": 2.5,
+      "eta_eff0": 2.892122572761014,
+      "g_c0": 2.005080781593676,
+      "Gp0": 2.1690919295707602,
+      "nu_s0": 0.7230306431902535,
+      "tau_y0": 2.005080781593676,
+      "lam0_out": 1.0
+    }
+  },
+  "yield_pref_floor": 0.0,
+  "walltime_s": 65.27338314056396
+}

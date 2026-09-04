@@ -1,0 +1,7 @@
+# Forward-only sweep across the elastoviscoplastic yield transition.
+# Runs campaigns/fwd_yield_sweep.py.
+# x64 true is required by the yield-sweep runner.
+experiment: evp_forward
+x64: true
+wrapper: sweep
+job: A

@@ -1,0 +1,8 @@
+# SLURM submission scripts and logs are local run infrastructure, not part of
+# the committed analysis (the .py scripts + results are the deliverable).
+*.sh
+slurm_logs/
+__pycache__/
+*.pyc
+scripts/gel/results/paper_figures/curves.pkl
+scripts/gel/results/paper_figures_reverse/curves.pkl

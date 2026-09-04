@@ -1,0 +1,5 @@
+# Regenerate the complete paper_figs figure and table set.
+# Runs campaigns/make_all_figures.py; see the whole-set regeneration row of REPRODUCE.md.
+# x64 true is required: paper_figs enables it at import.
+experiment: figures
+x64: true

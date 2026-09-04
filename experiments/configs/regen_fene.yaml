@@ -1,0 +1,17 @@
+# Replay the learned FENE-P contraction forwards for the readback panels.
+# Runs campaigns/regen_contraction.py; see the learned-forwards row of REPRODUCE.md.
+# x64 true is required by the regeneration runners.
+experiment: regen
+x64: true
+family: fene
+campaign_root: tbnn_press_prod
+runs:
+  - ctr_fene_s1_wp0p1
+  - ctr_fene_s1_wp1
+  - ctr_fene_s1_wp10
+  - ctr_fene_s1b_wp0p1
+  - ctr_fene_s1b_wp1
+  - ctr_fene_s1b_wp10
+  - ctr_fene_s4_wp0p1
+  - ctr_fene_s4_wp1
+  - ctr_fene_s4_wp10

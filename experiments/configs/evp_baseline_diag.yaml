@@ -1,0 +1,7 @@
+# Elastoviscoplastic baseline diagnostics on the Ny=128 channel.
+# historical campaign: evp_diag_phase0
+# Runs campaigns/evp_baseline_diag.py.
+# x64 true is required by the baseline-diagnostics runner.
+experiment: evp_diag
+x64: true
+wrapper: baseline

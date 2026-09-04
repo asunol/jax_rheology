@@ -1,0 +1,12 @@
+# Generalized-Newtonian constriction truth solve for Fig. 2 (Carreau-Yasuda, n=0.7).
+# See the Fig. 2 row of REPRODUCE.md.
+# x64 false: production trajectories are float32; pinned so a shell JAX_ENABLE_X64 cannot change the hash.
+experiment: gnf_truth
+x64: false
+geometry: constriction
+model: carreau_yasuda
+params: [0.02, 1.0, 5.0, 0.7, 2.0]
+pressure_gradient: 5.0
+dt: 1.0e-5
+inner_steps: 400
+outer_steps: 2000

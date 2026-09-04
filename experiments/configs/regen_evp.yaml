@@ -1,0 +1,7 @@
+# Replay the learned elastoviscoplastic forwards for the readback panels.
+# Runs campaigns/regen_evp.py; see the learned-forwards row of REPRODUCE.md.
+# x64 true is required by the regeneration runners.
+experiment: regen
+x64: true
+family: evp
+runs: [v2_final_Nx16_br, v2_final_Nx16_ones]

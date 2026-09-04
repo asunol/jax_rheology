@@ -1,0 +1,1773 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 14.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     65899,       1765]
+NotebookOptionsPosition[     59974,       1647]
+NotebookOutlinePosition[     60406,       1664]
+CellTagsIndexPosition[     60363,       1661]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Explicit viscoelastic equation derivation", "Title",
+ CellChangeTimes->{{3.9465504497732477`*^9, 
+  3.946550457243265*^9}},ExpressionUUID->"45f584d2-c5b3-475a-a2fc-\
+3355ce3c1137"],
+
+Cell["\<\
+This notebook includes code to solve for explicit representations of common \
+viscoelastic constitutive equations. These equations are tensor equations \
+relating an applied stress sigma (denoted here as s) to a strain rate gamma \
+dot (denoted here as g). These two tensors are symmetric tensors and so each \
+have six independent components. Common use cases include calculating the \
+stress resulting from an imposed strain and calculating strain from an \
+imposed stress. We are concerned with shear-rheometer geometries, which \
+somewhat simplifies the resulting math. In particular, we assume that \
+derivatives in the x direction are all 0 by symmetry. 
+
+When solving for stress from an input strain, we will solve the extra stress \
+equations to find the extra stress \[Tau] then find the total stress \
+\[Sigma]=\[Tau]+\[Eta]s \[Gamma]. \
+\>", "Text",
+ CellChangeTimes->{{3.946550474898273*^9, 3.946550488448346*^9}, {
+  3.946550578744047*^9, 
+  3.946550773937409*^9}},ExpressionUUID->"012d64c7-06fa-4210-8935-\
+ad39e7c710bc"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"Use", " ", "if", " ", "on", " ", "a", " ", "notebook"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"notebookPath", "=", 
+     RowBox[{"NotebookFileName", "[", "]"}]}], ";"}], "\n", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"notebookPath", "=!=", "$Failed"}], ",", 
+     RowBox[{"SetDirectory", "[", 
+      RowBox[{"DirectoryName", "[", "notebookPath", "]"}], "]"}], ",", 
+     RowBox[{
+     "MessageDialog", "[", 
+      "\"\<The notebook must be saved on disk to determine its \
+directory.\>\"", "]"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.94656529704708*^9, 3.946565328200773*^9}, {
+  3.946597800633955*^9, 3.946597810060972*^9}, {3.946598307137043*^9, 
+  3.946598307726708*^9}, {3.946598432002798*^9, 3.9465984441787167`*^9}},
+ CellLabel->"In[61]:=",ExpressionUUID->"a3ca10dd-f88f-4ae1-b00c-dddb81cf8548"],
+
+Cell[BoxData["\<\"/Users/jamesroggeveen/Dropbox/01_Research/14_differentiable_\
+viscoelasticity/diff_rheo/docs/constitutive_equations\"\>"], "Output",
+ CellChangeTimes->{3.946686384163748*^9, 3.946738903098025*^9, 
+  3.948462636621928*^9, 3.9484771739320593`*^9, 3.948492362906891*^9, 
+  3.94907664606953*^9},
+ CellLabel->"Out[62]=",ExpressionUUID->"41dd07a4-8dc4-4a6e-9fd1-d678872340ad"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["General definitions", "Chapter",
+ CellChangeTimes->{{3.946550794937111*^9, 
+  3.9465507990648537`*^9}},ExpressionUUID->"2bb825a4-6be4-45f6-94eb-\
+a46884caed4c"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"sMat", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"s11", "[", "t", "]"}], ",", 
+       RowBox[{"s12", "[", "t", "]"}], ",", 
+       RowBox[{"s13", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"s12", "[", "t", "]"}], ",", 
+       RowBox[{"s22", "[", "t", "]"}], ",", 
+       RowBox[{"s23", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"s13", "[", "t", "]"}], ",", 
+       RowBox[{"s23", "[", "t", "]"}], ",", 
+       RowBox[{"s33", "[", "t", "]"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"tauMat", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"tau11", "[", "t", "]"}], ",", 
+       RowBox[{"tau12", "[", "t", "]"}], ",", 
+       RowBox[{"tau13", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"tau12", "[", "t", "]"}], ",", 
+       RowBox[{"tau22", "[", "t", "]"}], ",", 
+       RowBox[{"tau23", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"tau13", "[", "t", "]"}], ",", 
+       RowBox[{"tau23", "[", "t", "]"}], ",", 
+       RowBox[{"tau33", "[", "t", "]"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"dU", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"u11", "[", "t", "]"}], ",", 
+       RowBox[{"u12", "[", "t", "]"}], ",", 
+       RowBox[{"u13", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"u21", "[", "t", "]"}], ",", 
+       RowBox[{"u22", "[", "t", "]"}], ",", 
+       RowBox[{"u23", "[", "t", "]"}]}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"u31", "[", "t", "]"}], ",", 
+       RowBox[{"u32", "[", "t", "]"}], ",", 
+       RowBox[{"u33", "[", "t", "]"}]}], "}"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraStressSolveFunctionList", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"tau11", "[", "t", "]"}], ",", 
+     RowBox[{"tau22", "[", "t", "]"}], ",", 
+     RowBox[{"tau33", "[", "t", "]"}], ",", 
+     RowBox[{"tau12", "[", "t", "]"}], ",", 
+     RowBox[{"tau13", "[", "t", "]"}], ",", 
+     RowBox[{"tau23", "[", "t", "]"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolveFunctionList", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"s11", "[", "t", "]"}], ",", 
+     RowBox[{"s22", "[", "t", "]"}], ",", 
+     RowBox[{"s33", "[", "t", "]"}], ",", 
+     RowBox[{"u12", "[", "t", "]"}], ",", 
+     RowBox[{"s13", "[", "t", "]"}], ",", 
+     RowBox[{"s23", "[", "t", "]"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gMat", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"1", "/", "2"}], 
+    RowBox[{"(", 
+     RowBox[{"dU", "+", 
+      RowBox[{"Transpose", "[", "dU", "]"}]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraStressSolveComponentList", " ", "=", 
+   RowBox[{"D", "[", 
+    RowBox[{"extraStressSolveFunctionList", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolveComponentList", " ", "=", " ", 
+   RowBox[{"D", "[", 
+    RowBox[{"strainSolveFunctionList", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"zeroNonShearStrainRateList", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"u11", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u22", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u33", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u23", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u13", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u31", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u32", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u21", "[", "t", "]"}], "->", "0"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"zeroNonShearStrainDerivativeList", " ", "=", " ", 
+   RowBox[{"D", "[", 
+    RowBox[{"zeroNonShearStrainRateList", ",", "t"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"zeroNonShearStrainRuleList", " ", "=", " ", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+     "zeroNonShearStrainRateList", ",", "zeroNonShearStrainDerivativeList"}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+   "Set", " ", "of", " ", "rules", " ", "to", " ", "convert", " ", 
+    "expression", " ", "in", " ", "extra", " ", "stress", " ", "variable", " ",
+     "to", " ", "an", " ", "expression", " ", "in", " ", "total", " ", 
+    "stress", " ", "variable"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraStressRules", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Flatten", "@", 
+     RowBox[{"MapThread", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"#1", "->", 
+           RowBox[{"#2", "-", 
+            RowBox[{"solventViscosity", "*", "#3"}]}]}], ",", 
+          RowBox[{
+           RowBox[{"D", "[", 
+            RowBox[{"#1", ",", "t"}], "]"}], "->", 
+           RowBox[{"D", "[", 
+            RowBox[{
+             RowBox[{"#2", "-", 
+              RowBox[{"solventViscosity", "*", "#3"}]}], ",", "t"}], 
+            "]"}]}]}], "}"}], "&"}], ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"Flatten", "[", "tauMat", "]"}], ",", 
+         RowBox[{"Flatten", "[", "sMat", "]"}], ",", 
+         RowBox[{"Flatten", "[", "gMat", "]"}]}], "}"}]}], "]"}]}], "//", 
+    "DeleteDuplicates"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.946550807354157*^9, 3.946550814770504*^9}, {
+   3.946551174504366*^9, 3.946551228110634*^9}, {3.946551403364427*^9, 
+   3.946551408884389*^9}, {3.946551706293589*^9, 3.946551715365553*^9}, {
+   3.946551787528111*^9, 3.946551857515646*^9}, {3.946552689151767*^9, 
+   3.946552733229104*^9}, {3.946554630592842*^9, 3.94655468511495*^9}, {
+   3.946561437635035*^9, 3.946561452104439*^9}, {3.946561491879879*^9, 
+   3.946561508246324*^9}, {3.946561952821835*^9, 3.946561983886898*^9}, {
+   3.946562144674542*^9, 3.946562145054998*^9}, {3.946565581106429*^9, 
+   3.946565634405128*^9}, {3.9465658579796*^9, 3.94656590928828*^9}, {
+   3.946567311685903*^9, 3.9465673385794287`*^9}, {3.946567466101386*^9, 
+   3.946567476581115*^9}, 3.946567926591392*^9},
+ CellLabel->
+  "In[222]:=",ExpressionUUID->"d4bbfd92-2176-433a-b056-7a031a65767b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Helper Functions", "Chapter",
+ CellChangeTimes->{{3.946565224608974*^9, 
+  3.946565227690887*^9}},ExpressionUUID->"7366cdb0-2ee1-42f7-87f0-\
+ea82cfcbdf2a"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"camelToSnake", "[", "camel_String", "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"s1", ",", "snake"}], "}"}], ",", 
+    RowBox[{
+     RowBox[{"s1", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"camel", ",", 
+        RowBox[{
+         RowBox[{"RegularExpression", "[", "\"\<(.)([A-Z][a-z]+)\>\"", "]"}], 
+         ":>", "\"\<$1_$2\>\""}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"snake", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{"s1", ",", 
+        RowBox[{
+         RowBox[{"RegularExpression", "[", "\"\<([a-z0-9])([A-Z])\>\"", "]"}],
+          ":>", "\"\<$1_$2\>\""}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"ToLowerCase", "[", "snake", "]"}]}]}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"toPythonSyntax", "[", 
+   RowBox[{"expr_", ",", 
+    RowBox[{"name_", ":", "\"\<\>\""}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"intermediateExpr", ",", "intermediateExpr2"}], "}"}], ",", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"intermediateExpr", " ", "=", 
+      RowBox[{"FullSimplify", "[", 
+       RowBox[{"expr", "/.", " ", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"Derivative", "[", "1", "]"}], "[", "func_", "]"}], "[", 
+            "t", "]"}], ":>", 
+           RowBox[{"Symbol", "[", 
+            RowBox[{"\"\<d\>\"", "<>", 
+             RowBox[{"ToString", "[", "func", "]"}]}], "]"}]}], ",", 
+          RowBox[{
+           RowBox[{"func_", "[", "t", "]"}], ":>", "func"}]}], "}"}]}], 
+       "]"}]}], ";", " ", 
+     RowBox[{"intermediateExpr2", "=", 
+      RowBox[{"StringReplace", "[", 
+       RowBox[{
+        RowBox[{"ToString", "[", 
+         RowBox[{"intermediateExpr", ",", "InputForm"}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\"\<Sqrt\>\"", "->", "\"\<jnp.sqrt\>\""}], ",", 
+          RowBox[{"\"\<E^\>\"", "->", "\"\<jnp.exp\>\""}], ",", 
+          RowBox[{"\"\<^\>\"", "->", "\"\<**\>\""}], ",", 
+          RowBox[{"\"\<[\>\"", "->", "\"\<(\>\""}], ",", 
+          RowBox[{"\"\<]\>\"", "->", "\"\<)\>\""}], ",", 
+          RowBox[{"\"\<{\>\"", "->", "\"\<\>\""}], ",", 
+          RowBox[{"\"\<}\>\"", "->", "\"\<\>\""}], ",", 
+          RowBox[{"\"\<\\n\>\"", "->", "\"\<\>\""}], ",", 
+          RowBox[{"\"\< \>\"", "->", "\"\<\>\""}], ",", 
+          RowBox[{"\"\<->\>\"", "->", "\"\<=\>\""}], ",", 
+          RowBox[{
+           RowBox[{"RegularExpression", "[", "\"\<,\>\"", "]"}], 
+           "->", "\"\<\\n\>\""}]}], "}"}]}], "]"}]}], ";", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"If", "[", 
+       RowBox[{
+        RowBox[{"name", "!=", "\"\<\>\""}], ",", 
+        RowBox[{"\"\<# \>\"", "<>", "name", "<>", "\"\<\\n\>\""}], 
+        ",", "\"\<\>\""}], "]"}], "<>", 
+      RowBox[{"camelToSnake", "[", "intermediateExpr2", "]"}]}]}]}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"solveForViscoelasticEquations", "[", 
+   RowBox[{"LHS_", ",", "RHS_", ",", 
+    RowBox[{"name_", ":", "\"\<\>\""}], ",", 
+    RowBox[{"toStringExpr_", ":", "True"}]}], "]"}], ":=", 
+  RowBox[{"Module", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "extraStressEqn", ",", "totalStressEqn", ",", "extraStressSol", ",", 
+      "totalStressSol"}], "}"}], ",", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"extraStressEqn", "=", 
+      RowBox[{"LHS", "==", "RHS"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"extraStressSol", " ", "=", 
+      RowBox[{"FullSimplify", "[", 
+       RowBox[{"Cancel", "[", " ", 
+        RowBox[{"Solve", "[", 
+         RowBox[{"extraStressEqn", ",", "extraStressSolveComponentList"}], 
+         "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"totalStressEqn", "=", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"extraStressEqn", "/.", "extraStressRules"}], "/.", 
+        "zeroNonShearStrainRuleList"}], ")"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"totalStressSol", "=", 
+      RowBox[{"FullSimplify", "[", 
+       RowBox[{"Cancel", "[", 
+        RowBox[{"Solve", "[", 
+         RowBox[{"totalStressEqn", ",", "strainSolveComponentList"}], "]"}], 
+        "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"toStringExpr", "==", "True"}], ",", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"toPythonSyntax", "[", 
+           RowBox[{"extraStressSol", ",", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"name", "!=", "\"\<\>\""}], ",", 
+              RowBox[{"name", "<>", "\"\< extra stress\>\""}], 
+              ",", "\"\<\>\""}], "]"}]}], "]"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"toPythonSyntax", "[", 
+           RowBox[{"totalStressSol", ",", 
+            RowBox[{"If", "[", 
+             RowBox[{
+              RowBox[{"name", "!=", "\"\<\>\""}], ",", 
+              RowBox[{"name", "<>", "\"\< strain solution\>\""}], 
+              ",", "\"\<\>\""}], "]"}]}], "]"}], "}"}]}], "}"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"extraStressSol", ",", "totalStressSol"}], "}"}]}], "]"}]}]}],
+    "\[IndentingNewLine]", "]"}]}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.94656524950496*^9, 3.946565257361148*^9}, {
+   3.946567191996857*^9, 3.946567200078613*^9}, {3.946567961400621*^9, 
+   3.946567961555353*^9}, {3.946568097290731*^9, 3.946568100414581*^9}, {
+   3.946568152388739*^9, 3.946568165547472*^9}, {3.946568319938111*^9, 
+   3.946568332817097*^9}, {3.94656841491208*^9, 3.9465684276128063`*^9}, {
+   3.946568504545375*^9, 3.946568506204893*^9}, {3.946568588152657*^9, 
+   3.946568637446123*^9}, {3.946568686457218*^9, 3.946568728802078*^9}, {
+   3.9465688504173*^9, 3.946568855584475*^9}, {3.948486190694597*^9, 
+   3.94848622558008*^9}, 3.948486636879358*^9},
+ CellLabel->
+  "In[234]:=",ExpressionUUID->"0f7d21bd-537b-43e3-9d4e-065015ed4e83"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Solve for viscoelastic models", "Chapter",
+ CellChangeTimes->{{3.946568063513599*^9, 
+  3.9465680674108267`*^9}},ExpressionUUID->"03bd2a2c-b3be-4cfc-be7a-\
+fc2d882af1ca"],
+
+Cell[CellGroupData[{
+
+Cell["Oldroyd-B", "Subsection",
+ CellChangeTimes->{{3.946550784086389*^9, 
+  3.946550785544553*^9}},ExpressionUUID->"5a0c6cf7-82c4-4ff9-82c7-\
+50d5a87f6177"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"oldroydBExtraStressLHS", " ", "=", " ", 
+   RowBox[{"tauMat", " ", "+", " ", 
+    RowBox[{"relaxationTime", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}]}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldroydBExtraStressRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldroydBEquationStrings", " ", "=", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "oldroydBExtraStressLHS", ",", "oldroydBExtraStressRHS", 
+     ",", "\"\<Oldroyd-B\>\""}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.946565681158819*^9, 3.946565737790615*^9}, {
+  3.946565783143985*^9, 3.946565819452848*^9}, {3.9465659159104137`*^9, 
+  3.946565921458189*^9}, {3.946566924013589*^9, 3.946566924815598*^9}, {
+  3.946567352509966*^9, 3.946567456158164*^9}, {3.946567487587901*^9, 
+  3.946567500428317*^9}, {3.946568004016749*^9, 3.946568051048164*^9}, {
+  3.946568092082075*^9, 3.946568094108273*^9}, {3.946568890024701*^9, 
+  3.946568961138434*^9}, {3.946569039578459*^9, 3.946569049127215*^9}, {
+  3.946569203618266*^9, 3.946569204868684*^9}},
+ CellLabel->
+  "In[237]:=",ExpressionUUID->"e2018143-7e92-44c5-828a-5b50ed64bc6b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Giesekus", "Subsection",
+ CellChangeTimes->{{3.9465680753521843`*^9, 
+  3.946568081723092*^9}},ExpressionUUID->"e983f236-a39b-42de-b178-\
+f37a31b8205c"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"giesekusLHS", " ", "=", " ", 
+   RowBox[{"tauMat", " ", "+", " ", 
+    RowBox[{"relaxationTime", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}], 
+    "+", 
+    RowBox[{"alpha", " ", "*", 
+     RowBox[{"relaxationTime", "/", "polymerViscosity"}], "*", 
+     RowBox[{"tauMat", ".", "tauMat"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"giesekusRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"giesekusEquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"giesekusLHS", ",", "giesekusRHS", ",", "\"\<Giesekus\>\""}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.946568085448181*^9, 3.946568088190908*^9}, {
+   3.946568184033531*^9, 3.946568260619164*^9}, {3.946568470677354*^9, 
+   3.946568488636421*^9}, {3.946568734775662*^9, 3.946568735452869*^9}, {
+   3.946568770288088*^9, 3.946568771277132*^9}, {3.9465688738639193`*^9, 
+   3.946568879212355*^9}, {3.946569026298274*^9, 3.946569026885577*^9}, {
+   3.946569105369151*^9, 3.946569110416157*^9}, {3.946569197298218*^9, 
+   3.946569199194904*^9}, 3.946740534745785*^9},
+ CellLabel->"In[19]:=",ExpressionUUID->"5587ef8e-178f-44bd-8bf1-f880e921090b"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Linear PTT", "Subsection",
+ CellChangeTimes->{{3.946564849451654*^9, 3.946564849454035*^9}, {
+  3.946565042807066*^9, 3.9465650483917313`*^9}, {3.946565240953671*^9, 
+  3.946565242718061*^9}, {3.946569228555464*^9, 
+  3.946569262219215*^9}},ExpressionUUID->"95defc1d-9806-42ed-b5a0-\
+df2af4498230"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"PTTLinearLHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       RowBox[{"epsilon", " ", 
+        RowBox[{"relaxationTime", "/", "polymerViscosity"}], " ", 
+        RowBox[{"Tr", "[", "tauMat", "]"}]}]}], ")"}], "tauMat"}], " ", "+", 
+    " ", 
+    RowBox[{"relaxationTime", " ", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}], " ", "+", 
+       RowBox[{"zeta", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"tauMat", ".", "gMat"}], "+", 
+          RowBox[{"gMat", ".", "tauMat"}]}], ")"}]}]}], ")"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTLinearRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTLinearEquationStrings", "=", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"PTTLinearLHS", ",", "PTTLinearRHS", ",", "\"\<PTT Linear\>\""}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.946569243450984*^9, 3.9465693253544188`*^9}, {
+  3.946569381517164*^9, 3.946569418466539*^9}, {3.946569449374766*^9, 
+  3.946569529243455*^9}},
+ CellLabel->"In[22]:=",ExpressionUUID->"646e7acb-00d7-4557-9eca-ad1143d2eee2"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Exponential PTT", "Subsection",
+ CellChangeTimes->{{3.948489760603305*^9, 3.948489763171846*^9}, 
+   3.948489871392373*^9},ExpressionUUID->"9a2e1c2c-bf77-4e51-a67e-\
+6fa38303f594"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"PTTExponentialLHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Exp", "[", 
+      RowBox[{"epsilon", " ", 
+       RowBox[{"relaxationTime", "/", "polymerViscosity"}], " ", 
+       RowBox[{"Tr", "[", "tauMat", "]"}]}], "]"}], "tauMat"}], " ", "+", " ", 
+    RowBox[{"relaxationTime", " ", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}], " ", "+", 
+       RowBox[{"zeta", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"tauMat", ".", "gMat"}], "+", 
+          RowBox[{"gMat", ".", "tauMat"}]}], ")"}]}]}], ")"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTExponentialRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTExponentialEquationStrings", "=", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "PTTExponentialLHS", ",", "PTTExponentialRHS", ",", 
+     "\"\<PTT Exponential\>\""}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948489812716751*^9, 3.948489842726355*^9}, {
+  3.948490439336053*^9, 3.9484904441834908`*^9}},
+ CellLabel->"In[25]:=",ExpressionUUID->"f168da52-a35c-4d5e-a2c6-c7967cc34752"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["General PTT", "Subsection",
+ CellChangeTimes->{{3.948489867123073*^9, 
+  3.9484898692277613`*^9}},ExpressionUUID->"7b9f9960-c2e5-4ce0-b03f-\
+dc3b16dfa56f"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"PTTGeneralLHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"fPTT", "*", "tauMat"}], " ", "+", " ", 
+    RowBox[{"relaxationTime", " ", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}], " ", "+", 
+       RowBox[{"zeta", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"tauMat", ".", "gMat"}], "+", 
+          RowBox[{"gMat", ".", "tauMat"}]}], ")"}]}]}], ")"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTGeneralRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PTTGeneralEquationStrings", "=", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "PTTGeneralLHS", ",", "PTTGeneralRHS", ",", "\"\<PTT General\>\""}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948489884274667*^9, 3.948489909659116*^9}},
+ CellLabel->"In[28]:=",ExpressionUUID->"789b7d6a-92bd-43f5-b06f-03e5ba2c3560"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["General F formulation", "Subsection",
+ CellChangeTimes->{{3.946644617612625*^9, 
+  3.946644622938433*^9}},ExpressionUUID->"0a18813b-c14e-4a95-a371-\
+4954c59eeaa2"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"FTensor", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"F11", ",", "F12", ",", "F13"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"F12", ",", "F22", ",", "F23"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"F13", ",", "F23", ",", "F33"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FFormExtraStressLHS", " ", "=", "  ", 
+   RowBox[{"tauMat", " ", "+", " ", 
+    RowBox[{"relaxationTime", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}], 
+    "+", "FTensor"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FFormExtraStressRHS", " ", "=", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FFormEquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "FFormExtraStressLHS", ",", "FFormExtraStressRHS", ",", 
+     "\"\<F Form\>\""}], "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.9466446258815947`*^9, 3.946644718802586*^9}},
+ CellLabel->"In[31]:=",ExpressionUUID->"6b097bc3-7dc8-4559-ba8c-e65a84a42c18"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FENE-CR", "Subsection",
+ CellChangeTimes->{{3.9484529595403643`*^9, 
+  3.9484529615704727`*^9}},ExpressionUUID->"853011a4-ecc5-4403-8b9c-\
+6819b7052392"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"fFENECR", "=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"extensionLength", "^", "2"}], " ", "+", " ", 
+      RowBox[{
+       RowBox[{"relaxationTime", "/", "polymerViscosity"}], " ", "*", " ", 
+       RowBox[{"Tr", "[", "tauMat", "]"}]}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"extensionLength", "^", "2"}], " ", "-", " ", "3"}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENECRLHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       RowBox[{"relaxationTime", " ", 
+        RowBox[{"D", "[", 
+         RowBox[{
+          RowBox[{"1", "/", "fFENECR"}], ",", "t"}], "]"}]}]}], ")"}], 
+     "tauMat"}], " ", "+", " ", 
+    RowBox[{
+     RowBox[{"relaxationTime", "/", "fFENECR"}], " ", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}]}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENECRRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENECREquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"FENECRLHS", ",", "FENECRRHS", ",", "\"\<FENE CR\>\""}], "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948452970672707*^9, 3.948453246243711*^9}, 
+   3.948453278179874*^9},
+ CellLabel->
+  "In[240]:=",ExpressionUUID->"1907aa7a-2387-451d-b195-ea45a54bc78e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FENE-P", "Subsection",
+ CellChangeTimes->{{3.948453301009794*^9, 
+  3.948453307272201*^9}},ExpressionUUID->"e34e93f5-2594-4780-90cc-\
+3709b005ccd0"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"aFENEP", "=", 
+   RowBox[{
+    RowBox[{"extensionLength", "^", "2"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"extensionLength", "^", "2"}], " ", "-", "3"}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fFENEP", "=", " ", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"extensionLength", "^", "2"}], " ", "+", " ", 
+      RowBox[{
+       RowBox[{"relaxationTime", "/", 
+        RowBox[{"(", 
+         RowBox[{"aFENEP", "*", "polymerViscosity"}], ")"}]}], " ", "*", " ", 
+       
+       RowBox[{"Tr", "[", "tauMat", "]"}]}]}], ")"}], "/", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"extensionLength", "^", "2"}], " ", "-", " ", "3"}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENEPLHS", " ", "=", " ", 
+   RowBox[{"tauMat", "+", 
+    RowBox[{
+     RowBox[{"relaxationTime", "/", "fFENEP"}], "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}]}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENEPRHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"aFENEP", "/", "fFENEP"}], "*", "polymerViscosity", "*", 
+     "gMat"}], " ", "-", " ", 
+    RowBox[{
+     RowBox[{"D", "[", 
+      RowBox[{
+       RowBox[{"1", "/", "fFENEP"}], ",", "t"}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"relaxationTime", "*", "tauMat"}], "+", 
+       RowBox[{"aFENEP", "*", "polymerViscosity", "*", 
+        RowBox[{"IdentityMatrix", "[", "3", "]"}]}]}], ")"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"FENEPEquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"FENEPLHS", ",", "FENEPRHS", ",", "\"\<FENE P\>\""}], "]"}]}], 
+  ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948453332454135*^9, 3.948453478690342*^9}, 
+   3.948453528470438*^9, 3.948453621546636*^9, 
+   3.994276668222125*^9},ExpressionUUID->"f877b9d0-34b4-47c5-8f16-\
+7334ccdd64c9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["XPomPom", "Subsection",
+ CellChangeTimes->{{3.9484622504073563`*^9, 
+  3.948462252381061*^9}},ExpressionUUID->"ee836fb7-ac57-4101-95f1-\
+20a36fe34018"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"lambdaPomPom", " ", "=", " ", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{"1", "+", 
+     RowBox[{
+      RowBox[{"Tr", "[", "tauMat", "]"}], "/", 
+      RowBox[{"(", 
+       RowBox[{"3", "*", 
+        RowBox[{"polymerViscosity", "/", "relaxationTime"}]}], ")"}]}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"fPomPom", "=", " ", 
+   RowBox[{
+    RowBox[{"2", 
+     RowBox[{"relaxationTime", "/", "relaxationTimeS"}], " ", 
+     RowBox[{"Exp", "[", 
+      RowBox[{
+       RowBox[{"2", "/", "q"}], "*", 
+       RowBox[{"(", 
+        RowBox[{"lambdaPomPom", "-", "1"}], ")"}]}], "]"}], 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"1", "/", 
+        RowBox[{"lambdaPomPom", "^", 
+         RowBox[{"(", 
+          RowBox[{"n", "+", "1"}], ")"}]}]}]}], ")"}]}], "+", 
+    RowBox[{
+     RowBox[{"1", "/", 
+      RowBox[{"lambdaPomPom", "^", "2"}]}], 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{
+        RowBox[{"alpha", "/", "3"}], "*", 
+        RowBox[{
+         RowBox[{"Tr", "[", 
+          RowBox[{"tauMat", ".", "tauMat"}], "]"}], "/", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"polymerViscosity", "/", "relaxationTime"}], ")"}], "^", 
+          "2"}]}]}]}], ")"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XPomPomLHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"fPomPom", "*", "tauMat"}], " ", "+", " ", 
+    RowBox[{"relaxationTime", "*", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"D", "[", 
+        RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+       RowBox[{"tauMat", ".", "dU"}], "-", 
+       RowBox[{
+        RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}], 
+    "+", 
+    RowBox[{"alpha", "*", 
+     RowBox[{"relaxationTime", "/", "polymerViscosity"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"tauMat", ".", "tauMat"}], ")"}]}], "+", 
+    RowBox[{
+     RowBox[{"polymerViscosity", "/", "relaxationTime"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"fPomPom", "-", "1"}], ")"}], "*", 
+     RowBox[{"IdentityMatrix", "[", "3", "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XPomPomRHS", " ", "=", " ", 
+   RowBox[{"polymerViscosity", "*", "gMat"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"XPomPomEquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"XPomPomLHS", ",", "XPomPomRHS", ",", "\"\<XPomPom\>\""}], 
+    "]"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948462257116938*^9, 3.9484624978745317`*^9}, {
+   3.948462650065844*^9, 3.948462701071034*^9}, 3.948463916755638*^9, {
+   3.948478243268551*^9, 3.948478246202164*^9}, {3.9484861142069902`*^9, 
+   3.948486126004126*^9}, {3.948488901004785*^9, 3.948488923513498*^9}},
+ CellLabel->"In[44]:=",ExpressionUUID->"fdcf43a1-234e-4ae2-aa2d-d3fb1eb224be"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Rolie-Poly", "Subsection",
+ CellChangeTimes->{{3.9484899751391077`*^9, 
+  3.948489977346663*^9}},ExpressionUUID->"910c2883-efa8-496b-bcc9-\
+8489059693c7"],
+
+Cell["\<\
+For code consistency we solve the problem using tauMat, though in this case \
+tauMat represents the conformation tensor A and should be appropriately \
+transformed in the output.\
+\>", "Text",
+ CellChangeTimes->{{3.948490214607997*^9, 
+  3.9484902710100603`*^9}},ExpressionUUID->"de39a23d-2b2d-4544-8cac-\
+83b798c470f8"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"chi", " ", "=", " ", 
+   RowBox[{"Sqrt", "[", 
+    RowBox[{
+     RowBox[{"Tr", "[", "tauMat", "]"}], "/", "3"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"k", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"3", "-", 
+       RowBox[{
+        RowBox[{"chi", "^", "2"}], "/", 
+        RowBox[{"chiMax", "^", "2"}]}]}], ")"}], "*", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"1", "-", 
+        RowBox[{"1", "/", 
+         RowBox[{"chiMax", "^", "2"}]}]}], ")"}], "/", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"1", "-", 
+          RowBox[{
+           RowBox[{"chi", "^", "2"}], "/", 
+           RowBox[{"chiMax", "^", "2"}]}]}], ")"}], "*", 
+        RowBox[{"(", 
+         RowBox[{"3", "-", 
+          RowBox[{"1", "/", 
+           RowBox[{"chiMax", "^", "2"}]}]}], ")"}]}], ")"}]}]}], "//", 
+    "FullSimplify"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RoliePolyLHS", " ", "=", " ", 
+   RowBox[{"relaxationTime", "*", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"D", "[", 
+       RowBox[{"tauMat", ",", "t"}], "]"}], "-", 
+      RowBox[{"tauMat", ".", "dU"}], "-", 
+      RowBox[{
+       RowBox[{"Transpose", "[", "dU", "]"}], ".", "tauMat"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RoliePolyRHS", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"-", 
+     RowBox[{"(", 
+      RowBox[{"tauMat", "-", 
+       RowBox[{"IdentityMatrix", "[", "3", "]"}]}], ")"}]}], "-", 
+    RowBox[{"2", "*", "k", "*", 
+     RowBox[{"relaxationTime", "/", "relaxationTimeR"}], "*", 
+     RowBox[{"(", 
+      RowBox[{"1", "-", 
+       RowBox[{"Sqrt", "[", 
+        RowBox[{"3", "/", 
+         RowBox[{"Tr", "[", "tauMat", "]"}]}], "]"}]}], ")"}], 
+     RowBox[{"(", 
+      RowBox[{"tauMat", " ", "+", " ", 
+       RowBox[{"beta", "*", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{"Tr", "[", "tauMat", "]"}], "/", "3"}], ")"}], "^", 
+          "delta"}], ")"}], "*", 
+        RowBox[{"(", 
+         RowBox[{"tauMat", "-", 
+          RowBox[{"IdentityMatrix", "[", "3", "]"}]}], ")"}]}]}], ")"}]}]}]}],
+   ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"functionStringList", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"ToString", "[", 
+      RowBox[{
+       RowBox[{"#", "/.", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"func_", "[", "t", "]"}], ":>", "func"}], "}"}]}], ",", 
+       "InputForm"}], "]"}], "&"}], "/@", "extraStressSolveFunctionList"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"stringReplacementList", " ", "=", " ", 
+   RowBox[{"Flatten", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", "->", 
+        RowBox[{"\"\<A\>\"", "<>", 
+         RowBox[{"StringTake", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"{", 
+            RowBox[{"4", ",", "5"}], "}"}]}], "]"}]}]}], "}"}], "&"}], "/@", 
+     "functionStringList"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"RoliePolyEquationStrings", " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"RoliePolyLHS", ",", "RoliePolyRHS", ",", "\"\<Rolie Poly\>\""}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RoliePolyEquationStrings", "[", 
+    RowBox[{"[", 
+     RowBox[{"1", ",", "1"}], "]"}], "]"}], "=", 
+   RowBox[{"StringReplace", "[", 
+    RowBox[{
+     RowBox[{"RoliePolyEquationStrings", "[", 
+      RowBox[{"[", 
+       RowBox[{"1", ",", "1"}], "]"}], "]"}], ",", "stringReplacementList"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"RoliePolyEquationStrings", "[", 
+    RowBox[{"[", "2", "]"}], "]"}], "=", 
+   RowBox[{"{", "}"}]}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.948489990127851*^9, 3.948490211012515*^9}, {
+   3.948490277643416*^9, 3.9484904135649433`*^9}, {3.94849046602859*^9, 
+   3.948490476418792*^9}, {3.948493038183612*^9, 3.948493039588916*^9}, {
+   3.948493075866137*^9, 3.948493119872655*^9}, 3.948494220111972*^9, {
+   3.948498540050499*^9, 3.94849854016206*^9}},
+ CellLabel->"In[49]:=",ExpressionUUID->"fb07c80f-780f-4270-9537-04c67102e240"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Output results", "Chapter",
+ CellChangeTimes->{{3.946569547116009*^9, 
+  3.94656954956035*^9}},ExpressionUUID->"d282c716-d34c-4426-b8da-\
+b10346e98145"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"pattern", "=", "\"\<*EquationStrings\>\""}], ";", "\n", 
+    RowBox[{"outputStrings", "=", 
+     RowBox[{"Flatten", "[", 
+      RowBox[{"ToExpression", "[", 
+       RowBox[{"Names", "[", "pattern", "]"}], "]"}], "]"}]}], ";"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"outputStrings", "=", 
+     RowBox[{"{", 
+      RowBox[{
+      "oldroydBEquationStrings", ",", "giesekusEquationStrings", ",", 
+       "PTTLinearEquationStrings", ",", "PTTExponentialEquationStrings", ",", 
+       "PTTGeneralEquationStrings", ",", "FFormEquationStrings", ",", 
+       "FENECREquationStrings", ",", "FENEPEquationStrings", ",", 
+       "XPomPomEquationStrings", ",", "RoliePolyEquationStrings"}], "}"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"outputStringFormatted", " ", "=", 
+     RowBox[{"StringTrim", "[", 
+      RowBox[{"StringJoin", "@@", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"#", "<>", "\"\<\\n\\n\>\""}], "&"}], "/@", 
+         RowBox[{"Flatten", "[", "outputStrings", "]"}]}], ")"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Export", "[", 
+     RowBox[{
+     "\"\<viscoelastic_models.txt\>\"", ",", "outputStringFormatted"}], "]"}],
+     ";"}]}]}]], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.946569621636207*^9, 3.9465697270103683`*^9}, {
+   3.94656976012313*^9, 3.94656994486829*^9}, {3.946569976238462*^9, 
+   3.946570008537204*^9}, {3.946570219063841*^9, 3.946570249889736*^9}, {
+   3.946598457125922*^9, 3.9465984575182467`*^9}, {3.946644733312395*^9, 
+   3.9466447356859283`*^9}, 3.946740540457127*^9, {3.94847178959323*^9, 
+   3.948471801418342*^9}, {3.9484904053412647`*^9, 3.948490409249733*^9}, {
+   3.948494225674008*^9, 3.948494231156229*^9}},
+ CellLabel->"In[58]:=",ExpressionUUID->"33c2ca30-33a5-4db8-b70b-6459eba8a7fb"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Generate Test Values", "Chapter",
+ CellChangeTimes->{{3.949077543943384*^9, 
+  3.949077548716361*^9}},ExpressionUUID->"50418dae-4971-4cf1-a5de-\
+85fd598b6f63"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"ExtraStress", ",", " ", "TotalStress"}], "}"}], " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "oldroydBExtraStressLHS", ",", "oldroydBExtraStressRHS", ",", "\"\<\>\"", 
+     ",", "False"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.9490775558104973`*^9, 3.949077716779826*^9}, {
+  3.9490777547201443`*^9, 3.949077954579483*^9}, {3.949078010205464*^9, 
+  3.949078055899225*^9}, {3.949078105079238*^9, 3.949078112579953*^9}, {
+  3.949078311771657*^9, 3.949078333985098*^9}, {3.949079017422906*^9, 
+  3.949079133360413*^9}, {3.949079208523918*^9, 3.949079254953257*^9}, {
+  3.949079336636486*^9, 3.9490793428036127`*^9}, {3.949079466918271*^9, 
+  3.949079490566622*^9}, {3.949080054931713*^9, 3.94908006422118*^9}, {
+  3.9490939827813168`*^9, 3.949093988280858*^9}, {3.949094099064391*^9, 
+  3.94909410138995*^9}, {3.949094208881369*^9, 3.949094217242766*^9}, {
+  3.94909444384813*^9, 3.949094479506332*^9}, {3.949094510404941*^9, 
+  3.949094582103231*^9}, {3.949095332718832*^9, 3.949095338682989*^9}, {
+  3.949095427432233*^9, 3.949095439497737*^9}},
+ CellLabel->
+  "In[490]:=",ExpressionUUID->"aed715fd-d014-4051-bb15-84312fc94f33"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"testVals", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"polymerViscosity", "->", "2."}], ",", 
+     RowBox[{"relaxationTime", "->", "1."}], ",", 
+     RowBox[{"solventViscosity", "->", "1."}], ",", 
+     RowBox[{"epsilon", "->", ".5"}], ",", 
+     RowBox[{"zeta", "->", ".7"}], ",", 
+     RowBox[{"alpha", "->", "0.5"}], ",", 
+     RowBox[{"beta", "->", ".75"}], ",", 
+     RowBox[{"extensionLength", "->", "2."}], ",", 
+     RowBox[{"n", "->", ".5"}], ",", 
+     RowBox[{"relaxationTimeS", "->", "1.2"}], ",", 
+     RowBox[{"q", "->", "1.3"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"stressVals", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", "->", "1."}], "}"}], "&"}], "/@", 
+     "extraStressSolveFunctionList"}], "//", "Flatten"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolVals", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", "->", "1."}], "}"}], "&"}], "/@", 
+     "strainSolveFunctionList"}], "//", "Flatten"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Fvals", " ", "=", " ", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"#", "->", "1."}], "}"}], "&"}], "/@", 
+     RowBox[{"{", 
+      RowBox[{
+      "F11", ",", "F22", ",", "F33", ",", "F12", ",", "F13", ",", "F23"}], 
+      "}"}]}], "//", "Flatten"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolInputVals", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"u11", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u22", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u33", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"s12", "[", "t", "]"}], "->", "1."}], ",", 
+     RowBox[{
+      RowBox[{"u21", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u13", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u31", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u23", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u32", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"s12", "'"}], "[", "t", "]"}], "->", "0."}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainVals", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"u11", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u22", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u33", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u12", "[", "t", "]"}], "->", "1."}], ",", 
+     RowBox[{
+      RowBox[{"u21", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u13", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u31", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u23", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u32", "[", "t", "]"}], "->", "0"}]}], "}"}]}], ";", 
+  RowBox[{"argMLE", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"epsilon", "*", 
+       RowBox[{"relaxationTime", "/", "polymerViscosity"}]}], ")"}], "*", 
+     RowBox[{"(", "3", ")"}]}], "/.", "testVals"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"MLENorm", " ", "=", " ", 
+   RowBox[{
+    RowBox[{"Gamma", "[", "beta", "]"}], "/.", "testVals"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"pttRule", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"fPTT", " ", "->", " ", 
+      RowBox[{"MLENorm", "*", 
+       RowBox[{"MittagLefflerE", "[", 
+        RowBox[{"alpha", ",", "beta", ",", 
+         RowBox[{"epsilon", "*", 
+          RowBox[{"relaxationTime", "/", "polymerViscosity"}], "*", "3"}]}], 
+        "]"}]}]}], "/.", "testVals"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraStressSolveComponentList", "/.", 
+   RowBox[{"First", "@", "ExtraStress"}]}], "/.", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+   "testVals", ",", "stressVals", ",", "Fvals", ",", "strainVals", ",", 
+    "pttRule"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolveComponentList", "/.", 
+   RowBox[{"First", "@", "TotalStress"}]}], "/.", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+   "testVals", ",", "strainSolVals", ",", "Fvals", ",", "strainSolInputVals", 
+    ",", "pttRule"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.949079256353559*^9, 3.9490792622274218`*^9}, {
+   3.949079413927561*^9, 3.9490794150444717`*^9}, {3.949090573439805*^9, 
+   3.949090593580793*^9}, {3.949093780445229*^9, 3.949093868379244*^9}, 
+   3.94909393771776*^9, {3.949094117177957*^9, 3.949094183051374*^9}, {
+   3.949094243664361*^9, 3.94909431966485*^9}, {3.9490943573473186`*^9, 
+   3.94909438793859*^9}, {3.9490944234829597`*^9, 3.9490944247707787`*^9}, {
+   3.949095366876732*^9, 3.949095367825782*^9}},
+ CellLabel->
+  "In[491]:=",ExpressionUUID->"f3812116-4d86-4c2c-809a-3251cc7eba11"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "1.`"}], ",", "1.`", ",", 
+   RowBox[{"-", "1.`"}], ",", "1.`", ",", 
+   RowBox[{"-", "1.`"}], ",", "0.`"}], "}"}]], "Output",
+ CellChangeTimes->{{3.949093845442424*^9, 3.949093868745829*^9}, 
+   3.9490939383020763`*^9, 3.949094080855858*^9, 3.94909418532417*^9, {
+   3.949094220583521*^9, 3.949094284412065*^9}, 3.949094325104637*^9, {
+   3.9490943808652897`*^9, 3.949094388255686*^9}, {3.9490944251016827`*^9, 
+   3.949094482057465*^9}, {3.9490945221965637`*^9, 3.949094544497649*^9}, 
+   3.949094584444343*^9, {3.949095342630851*^9, 3.949095368329176*^9}, 
+   3.949095442462163*^9},
+ CellLabel->
+  "Out[499]=",ExpressionUUID->"ec56dfa8-e4cc-4c6d-92e0-b846f69a9e17"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "1.`"}], ",", "0.`", ",", 
+   RowBox[{"-", "1.`"}], ",", 
+   RowBox[{"-", "3.`"}], ",", 
+   RowBox[{"-", "1.`"}], ",", "0.`"}], "}"}]], "Output",
+ CellChangeTimes->{{3.949093845442424*^9, 3.949093868745829*^9}, 
+   3.9490939383020763`*^9, 3.949094080855858*^9, 3.94909418532417*^9, {
+   3.949094220583521*^9, 3.949094284412065*^9}, 3.949094325104637*^9, {
+   3.9490943808652897`*^9, 3.949094388255686*^9}, {3.9490944251016827`*^9, 
+   3.949094482057465*^9}, {3.9490945221965637`*^9, 3.949094544497649*^9}, 
+   3.949094584444343*^9, {3.949095342630851*^9, 3.949095368329176*^9}, 
+   3.949095442463531*^9},
+ CellLabel->
+  "Out[500]=",ExpressionUUID->"faaa6802-b2f3-40f2-933d-a8e11d355f0c"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["TotalStress"], "Input",
+ CellChangeTimes->{{3.949095453194418*^9, 3.9490954599258738`*^9}},
+ CellLabel->
+  "In[505]:=",ExpressionUUID->"8290bcbb-dd5b-4d80-abeb-2a26686cdf25"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["s11", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"s11", "[", "t", "]"}], "relaxationTime"]}]}], ",", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["s22", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     RowBox[{
+      RowBox[{"-", 
+       FractionBox[
+        RowBox[{"s22", "[", "t", "]"}], "relaxationTime"]}], "+", 
+      RowBox[{
+       RowBox[{"u12", "[", "t", "]"}], " ", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"2", " ", 
+          RowBox[{"s12", "[", "t", "]"}]}], "-", 
+         RowBox[{"solventViscosity", " ", 
+          RowBox[{"u12", "[", "t", "]"}]}]}], ")"}]}]}]}], ",", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["s33", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"s33", "[", "t", "]"}], "relaxationTime"]}]}], ",", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["u12", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     FractionBox[
+      RowBox[{
+       RowBox[{"2", " ", 
+        RowBox[{"s12", "[", "t", "]"}]}], "-", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"polymerViscosity", "+", "solventViscosity", "+", 
+          RowBox[{"2", " ", "relaxationTime", " ", 
+           RowBox[{"s11", "[", "t", "]"}]}]}], ")"}], " ", 
+        RowBox[{"u12", "[", "t", "]"}]}], "+", 
+       RowBox[{"2", " ", "relaxationTime", " ", 
+        RowBox[{
+         SuperscriptBox["s12", "\[Prime]",
+          MultilineFunction->None], "[", "t", "]"}]}]}], 
+      RowBox[{"relaxationTime", " ", "solventViscosity"}]]}], ",", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["s13", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     RowBox[{"-", 
+      FractionBox[
+       RowBox[{"s13", "[", "t", "]"}], "relaxationTime"]}]}], ",", 
+    RowBox[{
+     RowBox[{
+      SuperscriptBox["s23", "\[Prime]",
+       MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+     RowBox[{
+      RowBox[{"-", 
+       FractionBox[
+        RowBox[{"s23", "[", "t", "]"}], "relaxationTime"]}], "+", 
+      RowBox[{
+       RowBox[{"s13", "[", "t", "]"}], " ", 
+       RowBox[{"u12", "[", "t", "]"}]}]}]}]}], "}"}], "}"}]], "Output",
+ CellChangeTimes->{3.949095460275093*^9},
+ CellLabel->
+  "Out[505]=",ExpressionUUID->"bcb23a16-d8c7-4dd1-9d7b-d203541b71f5"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"testValsVisc", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"polymerViscosityInf", " ", "->", " ", "2."}], ",", " ", 
+     RowBox[{"relaxationTimeInf", "->", "1."}], ",", " ", 
+     RowBox[{"Kval", " ", "->", " ", ".5"}], ",", " ", 
+     RowBox[{"Lval", " ", "->", " ", ".5"}], ",", " ", 
+     RowBox[{"nval", " ", "->", " ", ".7"}], ",", " ", 
+     RowBox[{"mval", "->", " ", ".8"}], ",", " ", 
+     RowBox[{"aval", " ", "->", " ", "1.2"}], ",", " ", 
+     RowBox[{"bval", " ", "->", " ", "1.5"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"testVals", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"polymerViscosity", "->", " ", 
+       RowBox[{"polymerViscosityInf", "*", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"Kval", "*", ".5"}], ")"}], "^", "aval"}]}], ")"}], "^", 
+         
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"nval", "-", "1"}], ")"}], "/", "aval"}], ")"}]}]}]}], "/.",
+       "testValsVisc"}], ",", 
+     RowBox[{"solventViscosity", "->", "1."}], ",", 
+     RowBox[{
+      RowBox[{"relaxationTime", "->", 
+       RowBox[{"relaxationTimeInf", "*", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"1", "+", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"Lval", "*", "0.5"}], ")"}], "^", "bval"}]}], ")"}], "^", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"mval", "-", "1"}], ")"}], "/", "bval"}], ")"}]}]}]}], "/.",
+       "testValsVisc"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"extraStressSolveComponentList", "/.", 
+   RowBox[{"First", "@", "ExtraStress"}]}], "/.", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+   "testVals", ",", "stressVals", ",", "Fvals", ",", "strainVals", ",", 
+    "pttRule"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainSolveComponentList", "/.", 
+   RowBox[{"First", "@", "TotalStress"}]}], "/.", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+   "testVals", ",", "strainSolVals", ",", "Fvals", ",", "strainSolInputVals", 
+    ",", "pttRule"}], "]"}]}]}], "Input",
+ CellChangeTimes->{{3.949079678891398*^9, 3.949079857683249*^9}, {
+   3.949079923888233*^9, 3.949079967500235*^9}, {3.949091170636065*^9, 
+   3.9490911811703577`*^9}, 3.9490940148865013`*^9, {3.949094627205967*^9, 
+   3.9490946569815063`*^9}},
+ CellLabel->
+  "In[501]:=",ExpressionUUID->"ae73da7e-3374-4509-b297-5e523f097fb7"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "1.0158283669860873`"}], ",", "0.9841716330139127`", ",", 
+   RowBox[{"-", "1.0158283669860873`"}], ",", "0.9568795678626911`", ",", 
+   RowBox[{"-", "1.0158283669860873`"}], ",", 
+   RowBox[{"-", "0.01582836698608725`"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.949079858060893*^9, {3.94907993032516*^9, 3.9490799679879503`*^9}, 
+   3.949091176088708*^9, {3.949094638652892*^9, 3.949094657302436*^9}, 
+   3.9490951504053717`*^9, 3.94909544760023*^9},
+ CellLabel->
+  "Out[503]=",ExpressionUUID->"de310854-3797-44af-b414-a3f67061bb44"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"-", "1.0158283669860873`"}], ",", 
+   RowBox[{"-", "0.01582836698608725`"}], ",", 
+   RowBox[{"-", "1.0158283669860873`"}], ",", 
+   RowBox[{"-", "2.9295875027114695`"}], ",", 
+   RowBox[{"-", "1.0158283669860873`"}], ",", 
+   RowBox[{"-", "0.01582836698608725`"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.949079858060893*^9, {3.94907993032516*^9, 3.9490799679879503`*^9}, 
+   3.949091176088708*^9, {3.949094638652892*^9, 3.949094657302436*^9}, 
+   3.9490951504053717`*^9, 3.949095447601356*^9},
+ CellLabel->
+  "Out[504]=",ExpressionUUID->"63b4bd28-126a-469c-891d-5eea9fc0cfdf"]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"oldroydBExtraStressEqns", ",", " ", "oldroydBTotalStressEqns"}], 
+    "}"}], " ", "=", " ", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{
+    "oldroydBExtraStressLHS", ",", "oldroydBExtraStressRHS", ",", "\"\<\>\"", 
+     ",", "False"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"FENECRExtraStressEqns", ",", " ", "FENECRTotalStressEqns"}], 
+    "}"}], "=", 
+   RowBox[{"solveForViscoelasticEquations", "[", 
+    RowBox[{"FENECRLHS", ",", "FENECRRHS", ",", "\"\<\>\"", ",", "False"}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"strainVals", " ", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"u11", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u22", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u33", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u21", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u13", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u31", "[", "t", "]"}], "->", "0."}], ",", 
+     RowBox[{
+      RowBox[{"u23", "[", "t", "]"}], "->", "0"}], ",", 
+     RowBox[{
+      RowBox[{"u32", "[", "t", "]"}], "->", "0"}]}], "}"}]}], ";"}]}], "Input",\
+
+ CellChangeTimes->{{3.94967667004242*^9, 3.949676761796894*^9}},
+ CellLabel->
+  "In[251]:=",ExpressionUUID->"65ad21c2-e69e-410c-8c35-a064f89bc0e0"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"First", "@", "oldroydBExtraStressEqns"}], "/.", "strainVals"}], 
+    "//", "FullSimplify"}], ")"}], "[", 
+  RowBox[{"[", "1", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.949676741745059*^9, 3.949676807400309*^9}, {
+  3.9496768375190697`*^9, 3.949676866656763*^9}},
+ CellLabel->
+  "In[264]:=",ExpressionUUID->"6ff6b808-d496-4f0a-9425-4f63583e6d29"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   SuperscriptBox["tau11", "\[Prime]",
+    MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+  RowBox[{"0.`", "\[VeryThinSpace]", "-", 
+   FractionBox[
+    RowBox[{"tau11", "[", "t", "]"}], "relaxationTime"]}]}]], "Output",
+ CellChangeTimes->{{3.949676745005526*^9, 3.949676810040333*^9}, {
+  3.949676844340869*^9, 3.949676870963169*^9}},
+ CellLabel->
+  "Out[264]=",ExpressionUUID->"e95f1bad-75f2-4efa-a8f2-f20106fe7658"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"First", "@", "FENECRExtraStressEqns"}], "/.", "strainVals"}], "//",
+     "FullSimplify"}], ")"}], "[", 
+  RowBox[{"[", "1", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.949676812641138*^9, 3.9496768344402723`*^9}, {
+  3.949676868117036*^9, 3.949676868236754*^9}},
+ CellLabel->
+  "In[263]:=",ExpressionUUID->"015d8578-a0fd-4d9f-8bdd-b6f14c540793"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   SuperscriptBox["tau11", "\[Prime]",
+    MultilineFunction->None], "[", "t", "]"}], "\[Rule]", 
+  RowBox[{
+   RowBox[{"(", 
+    RowBox[{"0.`", "\[VeryThinSpace]", "-", 
+     RowBox[{
+      SuperscriptBox["relaxationTime", "2"], " ", 
+      SuperscriptBox[
+       RowBox[{"tau11", "[", "t", "]"}], "3"]}], "-", 
+     RowBox[{"2", " ", "relaxationTime", " ", 
+      SuperscriptBox[
+       RowBox[{"tau11", "[", "t", "]"}], "2"], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{
+         SuperscriptBox["extensionLength", "2"], " ", "polymerViscosity"}], "+", 
+        RowBox[{"relaxationTime", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"tau22", "[", "t", "]"}], "+", 
+           RowBox[{"tau33", "[", "t", "]"}]}], ")"}]}]}], ")"}]}], "+", 
+     RowBox[{
+      RowBox[{"tau11", "[", "t", "]"}], " ", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"-", 
+         SuperscriptBox[
+          RowBox[{"(", 
+           RowBox[{
+            RowBox[{
+             SuperscriptBox["extensionLength", "2"], " ", 
+             "polymerViscosity"}], "+", 
+            RowBox[{"relaxationTime", " ", 
+             RowBox[{"(", 
+              RowBox[{
+               RowBox[{"tau22", "[", "t", "]"}], "+", 
+               RowBox[{"tau33", "[", "t", "]"}]}], ")"}]}]}], ")"}], "2"]}], "+", 
+        RowBox[{"2", " ", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"-", "3"}], "+", 
+           SuperscriptBox["extensionLength", "2"]}], ")"}], " ", 
+         "polymerViscosity", " ", 
+         SuperscriptBox["relaxationTime", "2"], " ", 
+         RowBox[{"tau12", "[", "t", "]"}], " ", 
+         RowBox[{"u12", "[", "t", "]"}]}]}], ")"}]}]}], ")"}], "/", 
+   RowBox[{"(", 
+    RowBox[{
+     SuperscriptBox["extensionLength", "2"], " ", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"-", "3"}], "+", 
+       SuperscriptBox["extensionLength", "2"]}], ")"}], " ", 
+     SuperscriptBox["polymerViscosity", "2"], " ", "relaxationTime"}], 
+    ")"}]}]}]], "Output",
+ CellChangeTimes->{{3.949676815596808*^9, 3.9496768348082323`*^9}, 
+   3.9496768691355057`*^9},
+ CellLabel->
+  "Out[263]=",ExpressionUUID->"6dc896ef-45d3-4daa-beb8-d3930afe1a26"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{974, 816},
+WindowMargins->{{196, Automatic}, {Automatic, -80}},
+FrontEndVersion->"14.2 for Mac OS X ARM (64-bit) (December 26, 2024)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"56a55460-0e75-4d4b-acd7-e6f0a996c30b"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 186, 3, 96, "Title",ExpressionUUID->"45f584d2-c5b3-475a-a2fc-3355ce3c1137"],
+Cell[769, 27, 1045, 18, 186, "Text",ExpressionUUID->"012d64c7-06fa-4210-8935-ad39e7c710bc"],
+Cell[CellGroupData[{
+Cell[1839, 49, 904, 21, 90, "Input",ExpressionUUID->"a3ca10dd-f88f-4ae1-b00c-dddb81cf8548"],
+Cell[2746, 72, 388, 5, 53, "Output",ExpressionUUID->"41dd07a4-8dc4-4a6e-9fd1-d678872340ad"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3171, 82, 166, 3, 67, "Chapter",ExpressionUUID->"2bb825a4-6be4-45f6-94eb-a46884caed4c"],
+Cell[3340, 87, 6548, 170, 351, "Input",ExpressionUUID->"d4bbfd92-2176-433a-b056-7a031a65767b",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9925, 262, 161, 3, 67, "Chapter",ExpressionUUID->"7366cdb0-2ee1-42f7-87f0-ea82cfcbdf2a"],
+Cell[10089, 267, 6088, 143, 474, "Input",ExpressionUUID->"0f7d21bd-537b-43e3-9d4e-065015ed4e83",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16214, 415, 176, 3, 67, "Chapter",ExpressionUUID->"03bd2a2c-b3be-4cfc-be7a-fc2d882af1ca"],
+Cell[CellGroupData[{
+Cell[16415, 422, 157, 3, 53, "Subsection",ExpressionUUID->"5a0c6cf7-82c4-4ff9-82c7-50d5a87f6177"],
+Cell[16575, 427, 1479, 33, 106, "Input",ExpressionUUID->"e2018143-7e92-44c5-828a-5b50ed64bc6b",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18091, 465, 158, 3, 53, "Subsection",ExpressionUUID->"e983f236-a39b-42de-b178-f37a31b8205c"],
+Cell[18252, 470, 1508, 33, 106, "Input",ExpressionUUID->"5587ef8e-178f-44bd-8bf1-f880e921090b",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[19797, 508, 304, 5, 53, "Subsection",ExpressionUUID->"95defc1d-9806-42ed-b5a0-df2af4498230"],
+Cell[20104, 515, 1445, 38, 106, "Input",ExpressionUUID->"646e7acb-00d7-4557-9eca-ad1143d2eee2",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[21586, 558, 186, 3, 53, "Subsection",ExpressionUUID->"9a2e1c2c-bf77-4e51-a67e-6fa38303f594"],
+Cell[21775, 563, 1404, 36, 127, "Input",ExpressionUUID->"f168da52-a35c-4d5e-a2c6-c7967cc34752",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[23216, 604, 161, 3, 53, "Subsection",ExpressionUUID->"7b9f9960-c2e5-4ce0-b03f-dc3b16dfa56f"],
+Cell[23380, 609, 1165, 31, 127, "Input",ExpressionUUID->"789b7d6a-92bd-43f5-b06f-03e5ba2c3560",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24582, 645, 169, 3, 53, "Subsection",ExpressionUUID->"0a18813b-c14e-4a95-a371-4954c59eeaa2"],
+Cell[24754, 650, 1348, 36, 106, "Input",ExpressionUUID->"6b097bc3-7dc8-4559-ba8c-e65a84a42c18",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[26139, 691, 159, 3, 53, "Subsection",ExpressionUUID->"853011a4-ecc5-4403-8b9c-6819b7052392"],
+Cell[26301, 696, 1663, 48, 127, "Input",ExpressionUUID->"1907aa7a-2387-451d-b195-ea45a54bc78e",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28001, 749, 154, 3, 53, "Subsection",ExpressionUUID->"e34e93f5-2594-4780-90cc-3709b005ccd0"],
+Cell[28158, 754, 2148, 62, 167, "Input",ExpressionUUID->"f877b9d0-34b4-47c5-8f16-7334ccdd64c9",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[30343, 821, 157, 3, 53, "Subsection",ExpressionUUID->"ee836fb7-ac57-4101-95f1-20a36fe34018"],
+Cell[30503, 826, 2858, 78, 188, "Input",ExpressionUUID->"fdcf43a1-234e-4ae2-aa2d-d3fb1eb224be",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[33398, 909, 160, 3, 53, "Subsection",ExpressionUUID->"910c2883-efa8-496b-bcc9-8489059693c7"],
+Cell[33561, 914, 330, 7, 55, "Text",ExpressionUUID->"de39a23d-2b2d-4544-8cac-83b798c470f8"],
+Cell[33894, 923, 4245, 123, 249, "Input",ExpressionUUID->"fb07c80f-780f-4270-9537-04c67102e240",
+ InitializationCell->True]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[38188, 1052, 158, 3, 67, "Chapter",ExpressionUUID->"d282c716-d34c-4426-b8da-b10346e98145"],
+Cell[38349, 1057, 1931, 44, 167, "Input",ExpressionUUID->"33c2ca30-33a5-4db8-b70b-6459eba8a7fb",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[40317, 1106, 165, 3, 67, "Chapter",ExpressionUUID->"50418dae-4971-4cf1-a5de-85fd598b6f63"],
+Cell[40485, 1111, 1240, 22, 49, "Input",ExpressionUUID->"aed715fd-d014-4051-bb15-84312fc94f33"],
+Cell[CellGroupData[{
+Cell[41750, 1137, 5008, 136, 335, "Input",ExpressionUUID->"f3812116-4d86-4c2c-809a-3251cc7eba11"],
+Cell[46761, 1275, 724, 14, 33, "Output",ExpressionUUID->"ec56dfa8-e4cc-4c6d-92e0-b846f69a9e17"],
+Cell[47488, 1291, 743, 15, 33, "Output",ExpressionUUID->"faaa6802-b2f3-40f2-933d-a8e11d355f0c"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48268, 1311, 188, 3, 29, "Input",ExpressionUUID->"8290bcbb-dd5b-4d80-abeb-2a26686cdf25"],
+Cell[48459, 1316, 2539, 73, 159, "Output",ExpressionUUID->"bcb23a16-d8c7-4dd1-9d7b-d203541b71f5"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[51035, 1394, 2571, 67, 172, "Input",ExpressionUUID->"ae73da7e-3374-4509-b297-5e523f097fb7"],
+Cell[53609, 1463, 594, 12, 33, "Output",ExpressionUUID->"de310854-3797-44af-b414-a3f67061bb44"],
+Cell[54206, 1477, 634, 14, 33, "Output",ExpressionUUID->"63b4bd28-126a-469c-891d-5eea9fc0cfdf"]
+}, Open  ]],
+Cell[54855, 1494, 1480, 41, 111, "Input",ExpressionUUID->"65ad21c2-e69e-410c-8c35-a064f89bc0e0"],
+Cell[CellGroupData[{
+Cell[56360, 1539, 428, 11, 29, "Input",ExpressionUUID->"6ff6b808-d496-4f0a-9425-4f63583e6d29"],
+Cell[56791, 1552, 461, 11, 46, "Output",ExpressionUUID->"e95f1bad-75f2-4efa-a8f2-f20106fe7658"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[57289, 1568, 426, 11, 29, "Input",ExpressionUUID->"015d8578-a0fd-4d9f-8bdd-b6f14c540793"],
+Cell[57718, 1581, 2216, 61, 125, "Output",ExpressionUUID->"6dc896ef-45d3-4daa-beb8-d3930afe1a26"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

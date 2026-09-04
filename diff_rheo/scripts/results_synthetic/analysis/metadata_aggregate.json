@@ -1,0 +1,707 @@
+[
+  {
+    "num_runs": 100,
+    "model_idx": 0,
+    "model_list": [
+      "Newtonian",
+      "CarreauYasuda",
+      "OldroydB",
+      "Giesekus",
+      "LinearPTT"
+    ],
+    "learning_rate": 0.1,
+    "n_epochs": 2000,
+    "seed": 1760763497,
+    "parameter_lookup": {
+      "Newtonian": {
+        "viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ]
+      },
+      "CarreauYasuda": {
+        "zero_shear_viscosity": [
+          1.0,
+          100.0,
+          "log"
+        ],
+        "infinite_shear_viscosity": [
+          0.01,
+          0.1,
+          "log"
+        ],
+        "k": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "n": [
+          0.2,
+          0.7,
+          "uniform"
+        ],
+        "a": [
+          0.5,
+          3.0,
+          "uniform"
+        ]
+      },
+      "OldroydB": {
+        "polymer_viscosity": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "uniform"
+        ]
+      },
+      "Giesekus": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "alpha": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "LinearPTT": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "zeta": [
+          0.01,
+          0.2,
+          "uniform"
+        ],
+        "epsilon": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "FENECR": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "extension_length": [
+          1.0,
+          10.0,
+          "log"
+        ]
+      }
+    },
+    "noise_level": 0.03,
+    "schedule_lr": false,
+    "_source_file": "results_l2_Newtonian.json"
+  },
+  {
+    "num_runs": 100,
+    "model_idx": 1,
+    "model_list": [
+      "Newtonian",
+      "CarreauYasuda",
+      "OldroydB",
+      "Giesekus",
+      "LinearPTT"
+    ],
+    "learning_rate": 0.1,
+    "n_epochs": 2000,
+    "seed": 1760831859,
+    "parameter_lookup": {
+      "Newtonian": {
+        "viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ]
+      },
+      "CarreauYasuda": {
+        "zero_shear_viscosity": [
+          1.0,
+          100.0,
+          "log"
+        ],
+        "infinite_shear_viscosity": [
+          0.01,
+          0.1,
+          "log"
+        ],
+        "k": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "n": [
+          0.2,
+          0.7,
+          "uniform"
+        ],
+        "a": [
+          0.5,
+          3.0,
+          "uniform"
+        ]
+      },
+      "OldroydB": {
+        "polymer_viscosity": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "uniform"
+        ]
+      },
+      "Giesekus": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "alpha": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "LinearPTT": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "zeta": [
+          0.01,
+          0.2,
+          "uniform"
+        ],
+        "epsilon": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "FENECR": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "extension_length": [
+          1.0,
+          10.0,
+          "log"
+        ]
+      }
+    },
+    "noise_level": 0.03,
+    "schedule_lr": false,
+    "_source_file": "results_l2_CarreauYasuda.json"
+  },
+  {
+    "num_runs": 100,
+    "model_idx": 2,
+    "model_list": [
+      "Newtonian",
+      "CarreauYasuda",
+      "OldroydB",
+      "Giesekus",
+      "LinearPTT"
+    ],
+    "learning_rate": 0.1,
+    "n_epochs": 2000,
+    "seed": 1760763513,
+    "parameter_lookup": {
+      "Newtonian": {
+        "viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ]
+      },
+      "CarreauYasuda": {
+        "zero_shear_viscosity": [
+          1.0,
+          100.0,
+          "log"
+        ],
+        "infinite_shear_viscosity": [
+          0.01,
+          0.1,
+          "log"
+        ],
+        "k": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "n": [
+          0.2,
+          0.7,
+          "uniform"
+        ],
+        "a": [
+          0.5,
+          3.0,
+          "uniform"
+        ]
+      },
+      "OldroydB": {
+        "polymer_viscosity": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "uniform"
+        ]
+      },
+      "Giesekus": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "alpha": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "LinearPTT": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "zeta": [
+          0.01,
+          0.2,
+          "uniform"
+        ],
+        "epsilon": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "FENECR": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "extension_length": [
+          1.0,
+          10.0,
+          "log"
+        ]
+      }
+    },
+    "noise_level": 0.03,
+    "schedule_lr": false,
+    "_source_file": "results_l2_OldroydB.json"
+  },
+  {
+    "num_runs": 100,
+    "model_idx": 3,
+    "model_list": [
+      "Newtonian",
+      "CarreauYasuda",
+      "OldroydB",
+      "Giesekus",
+      "LinearPTT"
+    ],
+    "learning_rate": 0.1,
+    "n_epochs": 2000,
+    "seed": 1760763513,
+    "parameter_lookup": {
+      "Newtonian": {
+        "viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ]
+      },
+      "CarreauYasuda": {
+        "zero_shear_viscosity": [
+          1.0,
+          100.0,
+          "log"
+        ],
+        "infinite_shear_viscosity": [
+          0.01,
+          0.1,
+          "log"
+        ],
+        "k": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "n": [
+          0.2,
+          0.7,
+          "uniform"
+        ],
+        "a": [
+          0.5,
+          3.0,
+          "uniform"
+        ]
+      },
+      "OldroydB": {
+        "polymer_viscosity": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "uniform"
+        ]
+      },
+      "Giesekus": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "alpha": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "LinearPTT": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "zeta": [
+          0.01,
+          0.2,
+          "uniform"
+        ],
+        "epsilon": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "FENECR": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "extension_length": [
+          1.0,
+          10.0,
+          "log"
+        ]
+      }
+    },
+    "noise_level": 0.03,
+    "schedule_lr": false,
+    "_source_file": "results_l2_Giesekus.json"
+  },
+  {
+    "num_runs": 100,
+    "model_idx": 4,
+    "model_list": [
+      "Newtonian",
+      "CarreauYasuda",
+      "OldroydB",
+      "Giesekus",
+      "LinearPTT"
+    ],
+    "learning_rate": 0.1,
+    "n_epochs": 2000,
+    "seed": 1760763513,
+    "parameter_lookup": {
+      "Newtonian": {
+        "viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ]
+      },
+      "CarreauYasuda": {
+        "zero_shear_viscosity": [
+          1.0,
+          100.0,
+          "log"
+        ],
+        "infinite_shear_viscosity": [
+          0.01,
+          0.1,
+          "log"
+        ],
+        "k": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "n": [
+          0.2,
+          0.7,
+          "uniform"
+        ],
+        "a": [
+          0.5,
+          3.0,
+          "uniform"
+        ]
+      },
+      "OldroydB": {
+        "polymer_viscosity": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "uniform"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "uniform"
+        ]
+      },
+      "Giesekus": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "alpha": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "LinearPTT": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "zeta": [
+          0.01,
+          0.2,
+          "uniform"
+        ],
+        "epsilon": [
+          0.01,
+          0.5,
+          "uniform"
+        ]
+      },
+      "FENECR": {
+        "polymer_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "relaxation_time": [
+          1.0,
+          10.0,
+          "log"
+        ],
+        "solvent_viscosity": [
+          0.1,
+          10.0,
+          "log"
+        ],
+        "extension_length": [
+          1.0,
+          10.0,
+          "log"
+        ]
+      }
+    },
+    "noise_level": 0.03,
+    "schedule_lr": false,
+    "_source_file": "results_l2_LinearPTT.json"
+  }
+]

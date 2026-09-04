@@ -1,0 +1,216 @@
+{
+  "repo": "jax_rheology",
+  "notes": "Committed truth is this file (paths, sha256s, full-digit losses, tolerances). Regenerated arrays are written under verify_data/ (gitignored). Numbers are copied from the recorded reference runs and are not re-derived here. The vacuous cavity ke=[0.0] comparison is not a check.",
+  "checks": [
+    {
+      "id": "import_smoke",
+      "level": "quick",
+      "partition": "login",
+      "command": "timeout 30s $PY -c 'import jax_cfd, jax_ib, jax_rheology, pkgutil; assert all Path(__file__) under $DST'",
+      "comparison": "exact-sha",
+      "provenance": "STAGE0-BASELINE",
+      "expected": {
+        "packages_under_dst": ["jax_cfd", "jax_ib", "jax_rheology"],
+        "jax_rheology_modules_under_dst": true
+      }
+    },
+    {
+      "id": "paper_mask",
+      "level": "quick",
+      "partition": "login",
+      "command": "timeout 30s $PY -c 'from verify.paper_mask import repo_constriction_focused_mask, mask_sha256; …'",
+      "comparison": "exact-sha",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "sha256": "49abc9d1b3a622a0c1070476f88bad7d5e0e121506772c370af0bafcda81198d",
+        "shape": [256, 128],
+        "source": "array_equal against the frozen native mask block; recorded mask sha256"
+      }
+    },
+    {
+      "id": "gnf",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY experiments/gnf_truth.py --config experiments/configs/gnf_constriction.yaml --output-dir $DST/verify_data/gnf",
+      "comparison": "exact-sha",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "sha256": "d15f94914277b98aafd1504bd0366f96c0cb7cab6cc0f4f1fbdd0187746f1628",
+        "filename": "channel_constriction_carreau_yasuda_etainf0.020_eta01.000_lam5.000_n0.500_a2.000_pg5.00_dt1e-05_in200_out100_trajectory.npy",
+        "source": "recorded numerical-parity run"
+      }
+    },
+    {
+      "id": "learned_forward",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY paper_figs/run_learned_forward.py --campaign-root fene7_prod --run fene7_u05_vel --expect-sha256 6d0ef574016a96a9eb65a9e59298ba4eff947f760a52b3270daad0278a09a603 --shared analysis_pub_readback/_campaign_fene/regen --out $DST/verify_data/learned_forward/fene_repr_forward.npz --smoke",
+      "comparison": "exact-sha",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "sha256": "6d0ef574016a96a9eb65a9e59298ba4eff947f760a52b3270daad0278a09a603",
+        "source": "recorded production command and numerical-parity run"
+      }
+    },
+    {
+      "id": "evp",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY experiments/evp_train.py --geometry channel --gauge-fixed --timing-probe 1 --Nx 8 --Ny 16 --outer-steps 2 --inner-steps 1 --g-x 4 --out-dir $DST/verify_data/evp",
+      "comparison": "exact-digits",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "loss_init": "1.278070e-05",
+        "source": "recorded numerical-parity and short-run results"
+      }
+    },
+    {
+      "id": "contraction",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY experiments/contraction_train.py --scheme s1 --mem-smoke --nx 32 --ny 64 --inner 2 --outer 1 --time-budget-s 180 --out-dir $DST/verify_data/contraction --run-name smoke_gies_stage0",
+      "comparison": "exact-digits",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "loss_init": "1.198263e-27",
+        "ckpt_reload": "PASS",
+        "source": "recorded numerical-parity run (latest CLI invocation)"
+      }
+    },
+    {
+      "id": "piv",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY experiments/piv_sweep.py 1 --num-steps 2 --inner-steps 2 --outer-steps 1",
+      "comparison": "exact-digits",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "final_loss": "3.644657e-15",
+        "source": "recorded numerical-parity run (Carreau-Yasuda reference uses paper gamma=1.0)"
+      }
+    },
+    {
+      "id": "figure_parity",
+      "level": "full",
+      "partition": "test",
+      "command": "ephemeral ln -s $SRC_MEM/paper_figs_derived $DST/paper_figs_derived; $PY experiments/figures.py --config experiments/configs/figures.yaml; compare $DST/final_figures vs $SRC_MEM/final_figures; rm symlink",
+      "comparison": "parity-table",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "identical": 63,
+        "tables_identical": 2,
+        "table_paths": ["tables/tableS2.md", "tables/tableS_evp_robustness.md"],
+        "source": "recorded figure-parity run (identical=63 includes the two tables)"
+      }
+    },
+    {
+      "id": "battery",
+      "level": "full",
+      "partition": "test",
+      "command": "$PYDR FENE-P refit r0 on the frozen fene8_u05_s1.npz target (ephemeral symlinks, removed after)",
+      "comparison": "exact-digits",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "provenance_tree_sha256": "6e709f80bddd365e556fc8eafc4aca9b84225313f2562f54dcd3715bdc438625",
+        "bic": -6324.334649737745,
+        "params": {
+          "polymer_viscosity": 2.1424479739938107,
+          "relaxation_time": 0.5480403036562487,
+          "solvent_viscosity": 0.7212286668308848,
+          "extension_length": 3.780420118555482
+        },
+        "source": "recorded diff_rheo equivalence run; paper frozen r0 bit-match"
+      }
+    },
+    {
+      "id": "porous",
+      "level": "full",
+      "partition": "gpu_test",
+      "command": "$PY experiments/gnf_truth.py --config experiments/configs/gnf_porous.yaml --output-dir $DST/verify_data/porous",
+      "comparison": "exact-sha",
+      "provenance": "STAGE0-BASELINE",
+      "expected": {
+        "sha256": "2e15974327a9146d73ddbd6c2718198df5e270ef43ff08a6d1190b90fba8b15a",
+        "filename": "porous_media_carreau_yasuda_etainf0.020_eta01.000_lam5.000_n0.700_a2.000_pg2.50_dt1e-04_in200_out300_trajectory.npy",
+        "source": "Self-hash recorded from a reference run (job 43062339, 36 s); no frozen paper artifact exists for this configuration."
+      }
+    },
+    {
+      "id": "obstacle",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY experiments/gnf_truth.py --config experiments/configs/gnf_obstacle.yaml --output-dir $DST/verify_data/obstacle_channel",
+      "comparison": "exact-sha",
+      "provenance": "STAGE4-BASELINE",
+      "expected": {
+        "sha256": "306787cda73ea3287e3958c3d82a14c5037a151487211b6fcb9716ce07ccd213",
+        "filename": "channel_obstacle_carreau_yasuda_etainf0.020_eta01.000_lam5.000_n0.500_a2.000_pg2.50_dt1e-04_in2_out1_trajectory.npy",
+        "source": "Stage 4 few-step self-hash (job 43298884, 38.6 s). STAGE4-BASELINE: unchanged since Stage 4, not a paper match. No frozen obstacle artifact."
+      }
+    },
+    {
+      "id": "cavity",
+      "level": "full",
+      "partition": "gpu_test",
+      "command": "20-step De=0.20 prefix of cavity_transfer_truth_ladder production config (inner=400, outer=20); hash (ke_traj, psi_min_traj)",
+      "comparison": "exact-sha",
+      "provenance": "STAGE0-BASELINE",
+      "expected": {
+        "mode": "prefix20",
+        "sha256": "4f00127af670296f4157abd42f093dfa7f7c03fbb6cca19c91ce1355204d6442",
+        "source": "Stage 0 D7: production De=0.20 vs frozen did not bit-match (ULP-level; see cavity verdict). 20-step self-hash tripwire."
+      }
+    },
+    {
+      "id": "api_snippets",
+      "level": "quick",
+      "partition": "gpu_test",
+      "command": "$PY examples/{forward_constriction,train_closure,run_experiment_from_config}.py at reduced scale",
+      "comparison": "rc-finite",
+      "provenance": "STAGE7-BASELINE",
+      "expected": {
+        "rc": 0,
+        "finite": true,
+        "source": "Stage 7 living documentation. Runtime-bounded; no hash."
+      }
+    },
+    {
+      "id": "fork_parity",
+      "level": "quick",
+      "partition": "login",
+      "command": "timeout 30s $PY -c 'from verify.fork_parity import compare_regions; …'",
+      "comparison": "source-identity",
+      "provenance": "STAGE8-BASELINE",
+      "expected": {
+        "identical": true,
+        "n_regions": 5,
+        "regions": [
+          "_logit",
+          "_softplus_inv",
+          "_default_mu_centers",
+          "BoundedSlopeViscosity",
+          "build_tbnn_bounded_model"
+        ],
+        "fork": "tbnn_model_selection/model_selection_tbnn.py",
+        "library": "jax_rheology/models/tbnn_instantaneous.py",
+        "source": "D4 final: fork retained; no-drift on the Flax TBNN definition (whitespace-normalized). init_tbnn_soft_newtonian / tbnn_eta_bounded_from_v already differ by comments / a broadcast (atlas §3.6) and are not in this set."
+      }
+    },
+    {
+      "id": "bundle_parity",
+      "level": "full",
+      "partition": "test",
+      "command": "DATA_ROOT=data_bundle TBNN_FIG_OUT=$DST/verify_data/bundle_parity/final_figures $PY experiments/figures.py; compare vs $SRC_MEM/final_figures; instantaneous helper load",
+      "comparison": "parity-table",
+      "provenance": "PAPER-MATCH",
+      "expected": {
+        "identical": 63,
+        "tables_identical": 2,
+        "table_paths": ["tables/tableS2.md", "tables/tableS_evp_robustness.md"],
+        "instantaneous": "visual/helper",
+        "note": "Honesty split: memory figures are hash-identical (identical=63, tables_identical=2). Three SN notes that record absolute data paths are counted identical after path normalization (bundle vs frozen prefixes). Instantaneous Fig 2/4/S4–S6 is visual/helper parity (loaders + summaries + trained_params; not a PNG hash set).",
+        "source": "PART B owner ruling 5; data_bundle/README.md"
+      }
+    }
+  ]
+}

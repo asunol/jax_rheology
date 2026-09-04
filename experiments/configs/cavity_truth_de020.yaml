@@ -1,0 +1,7 @@
+# Cavity transfer ladder at De=0.20, reference (truth) solve.
+# See the Fig. 5d rows of REPRODUCE.md.
+# x64 true is required: the ladder runner refuses to start without it.
+experiment: cavity_truth_ladder
+x64: true
+mode: ladder
+de: 0.20

@@ -1,0 +1,26 @@
+# FENE-P direct calibration at U=0.5 from initial guess I1 (Supplementary Fig. S13).
+# historical campaign: fene8_direct_u05 (frozen run tag fene8_direct_u05_I1)
+# Launched by slurm/run_fenep_direct.sh; see the Supplementary Fig. S13 row of REPRODUCE.md.
+# x64 true is required by the direct-fit runner.
+experiment: fenep_direct
+x64: true
+truth_gp: 3.2
+truth_lam: 0.7
+truth_nus: 0.8
+truth_lsq: 12.0
+nx: 128
+ny: 256
+dt: 1.0e-4
+inner_steps: 50
+outer_steps: 400
+ramp_time: 1.0
+loss_weight: roi
+maxiter: 60
+U: 0.5
+w_p: 0
+init_gp: 2.0
+init_lam: 1.5
+init_nus: 0.5
+init_lsq: 50
+out_dir: ./work/fenep_direct
+run_name: null

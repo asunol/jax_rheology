@@ -1,0 +1,6 @@
+true_model,Newtonian,CarreauYasuda,OldroydB,Giesekus,LinearPTT
+Newtonian,1.0,0.0,0.0,0.0,0.0
+CarreauYasuda,0.0,0.98,0.0,0.0,0.02
+OldroydB,0.0,0.0,0.98,0.01,0.01
+Giesekus,0.04,0.0,0.03,0.82,0.11
+LinearPTT,0.04,0.05,0.0,0.22,0.69

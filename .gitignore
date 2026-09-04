@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Bulk arrays are never committed; they live in the Zenodo deposit.
+*.npy
+*.npz
+*.pkl
+
+# Run output. Everything the code writes goes under work/ unless told otherwise.
+work/
+runs/
+final_figures/
+reference_trajectories/
+checkpoints/
+tbnn_debug_results*/
+
+# Verification suite scratch and regenerated arrays.
+verify_data/
+_smoke/
+
+# Ephemeral campaign trees, recreated on demand from the frozen archives.
+fene7_prod/
+fene8_prod/
+fene8_direct/
+gie_prod_rerun/
+analysis_pub_readback/
+tbnn_phase1_data/
+tbnn_evp_data/
+cavity_outputs/
+analysis_phase2_instrument/
+
+# The unpacked Zenodo data bundle, if placed inside the repo.
+data_bundle/
+
+# The battery provenance records are tracked; the derived CSVs, patches and
+# the end-of-pass comparison the gate writes at run time are not.
+reference_values/battery_provenance/*
+!reference_values/battery_provenance/*_snapshot.json
+
+# Internal audit and migration records; kept on disk, not part of the release.
+_audit/
+
+# Manuscript sources kept alongside the repo for reference; not part of the release.
+*.tex
+*.bbl
+*.synctex.gz

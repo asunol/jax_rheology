@@ -1,0 +1,7 @@
+# Cavity transfer ladder at De=0.20 driven by the learned closure.
+# See the Fig. 5d rows of REPRODUCE.md.
+# x64 true is required: the ladder runner refuses to start without it.
+experiment: cavity_learned_ladder
+x64: true
+mode: production
+de: 0.20

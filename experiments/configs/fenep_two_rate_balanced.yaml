@@ -1,0 +1,39 @@
+# FENE-P two-rate balanced contraction fit, rate_balance equal (Supplementary Fig. S12).
+# historical campaign: fene8_bal (frozen run tag fene8_bal_s4)
+# Launched by slurm/run_fenep_two_rate_balanced.sh; see the Supplementary Fig. S12 row of REPRODUCE.md.
+# x64 true is required by the contraction trainer.
+experiment: contraction_train
+x64: true
+truth_model: fene_p
+scheme: s4
+loss_weight: roi
+truth_gp: 3.2
+truth_lam: 0.7
+truth_nus: 0.8
+truth_lsq: 12.0
+gp_init: 1.0
+lam_init: 1.0
+nus_init: 1.0
+nx: 128
+ny: 256
+dt: 1.0e-4
+inner_steps: 50
+outer_steps: 400
+ramp_time: 1.0
+learning_rate: 5.0e-4
+warmup: 20
+clip: 1.0
+stage1_ftol: 1.0e-9
+width: 32
+depth: 2
+seed: 0
+curriculum_ulist: "0.5,4"
+curriculum_gate_after: 1
+w_p_scale: 1.0
+rate_balance: equal
+norms_json: ./reference_values/fenep_rate_balance_norms.json
+n_sub: 8
+checkpoint_every: 25
+time_budget_s: 165600
+out_dir: ./work/fenep_two_rate_balanced
+run_name: null

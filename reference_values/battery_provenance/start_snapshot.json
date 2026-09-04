@@ -1,0 +1,245 @@
+{
+  "tree": "diff_rheo",
+  "is_git_checkout": false,
+  "vendored_revision": "nat_coms @ 92d9dada",
+  "tree_sha256": "6e709f80bddd365e556fc8eafc4aca9b84225313f2562f54dcd3715bdc438625",
+  "n_python_files": 39,
+  "untracked": [],
+  "python": [
+    {
+      "path": "scripts/_paper_style.py",
+      "sha256": "411446443017d02b8c2fbd1957926f5f9894cca8ee7d2c4c87b6c13d99ba8d2d",
+      "size": 1216,
+      "tracked": true
+    },
+    {
+      "path": "scripts/gel/gel_composites_revised.py",
+      "sha256": "157502ca6e7bdf6b3872ce08c7b46c6105ac36cdce24b1c63a554dc7c72b924d",
+      "size": 8250,
+      "tracked": true
+    },
+    {
+      "path": "scripts/gel/gel_data.py",
+      "sha256": "ebd866acdfadc005c5aa675897394a70b04bdd9513c2573f639197a2a5631ea2",
+      "size": 6613,
+      "tracked": true
+    },
+    {
+      "path": "scripts/generate_random_data.py",
+      "sha256": "2422e3319ec760fa8748ad07831b97583c6a369c8f39ae22e8314faefcf34f65",
+      "size": 13117,
+      "tracked": true
+    },
+    {
+      "path": "scripts/synthetic_n1_recovery.py",
+      "sha256": "c1d1e6f299cddfb2df62c19e8d2f98e8efd2e7d8c20ee302f4891214be3680b5",
+      "size": 6384,
+      "tracked": true
+    },
+    {
+      "path": "scripts/visualize_data.py",
+      "sha256": "408c40eb6e4755b8831d359b7519996881c8446061933cc5a3c3f6dbc7ad3314",
+      "size": 23773,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/__init__.py",
+      "sha256": "27807ce774db6639d991526b58276557e22527adaab115049ae2f71ddebe53a9",
+      "size": 1149,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_core.py",
+      "sha256": "49f624a4e3ef4de5e96095013400fda4e447a6566826452512870c8aac2a4471",
+      "size": 23385,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_data_types.py",
+      "sha256": "5932419444ddbfec6270325b916dee78a460e02618d1d80e4768e860c73fe2a9",
+      "size": 18101,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_fitting.py",
+      "sha256": "a1eae134b675cceb65c5ad7814cd5c27533cb1074ec236c3efa3f3bbf349d368",
+      "size": 5369,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_forcing.py",
+      "sha256": "5fefba83a895ae47549b201111d4f05579215b0a6f0752a67b2d8dc15177b46a",
+      "size": 15241,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_protocols.py",
+      "sha256": "dbd2c47ca8bad0660538deb8f43a6bf06ab3d2abbcea3eb4cb66324c958a478c",
+      "size": 10867,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_rheometer.py",
+      "sha256": "fa041435b08185e79c0d2785e254aa1737f2398d2f4fb358f12a0433ab8f3f27",
+      "size": 8753,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_solver.py",
+      "sha256": "335b9d98bf671112c4f206d88b8ec12995a261b89d6ab60199d800659748a31c",
+      "size": 7521,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/_utils.py",
+      "sha256": "322313f78fab4da8a3d9cac0e7475d0a7f31dbfa221b0b29b872f90f1a0d3448",
+      "size": 8321,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/__init__.py",
+      "sha256": "956fa9fea4598a243b9a6c50d310fa8d22623fbf882b2bb2800ca5e0dc445072",
+      "size": 1136,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_conformation.py",
+      "sha256": "b30b0f30233951d5cd8fc307c5a89111e141f3d903febc5314f5b5328326605a",
+      "size": 4037,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_constitutive_model.py",
+      "sha256": "240d59fb4203eaf085f6f1204a94f5f09f30d61223c621ada71c13922556ee5e",
+      "size": 12190,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_generalized_newtonian.py",
+      "sha256": "0d519bc88daf4dbac713cea3e65e1304fa1c4c3af6b4ff4c291f87c78d95b7d5",
+      "size": 6423,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_multimode.py",
+      "sha256": "f5721062dbf1c7bdc6d1da7d0298a66c3ad90ef55081c83fec084d26f86cb623",
+      "size": 12780,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_rude.py",
+      "sha256": "4696201a4baf6e860d909a0c975dfee2ec2adc53f11b3ab623ddebe7f87b3b4a",
+      "size": 12159,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_sparse_basis.py",
+      "sha256": "136e9b9b344c8dbe608bafb77b459903b64691e52a87c5a43fd8b25b3ae56707",
+      "size": 3194,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/models/_viscoelastic.py",
+      "sha256": "5b97a12ebe9796e708f17da39b2b457a8046432a7b17b12438a4c27445806d8a",
+      "size": 68753,
+      "tracked": true
+    },
+    {
+      "path": "src/diff_rheo/parameters.py",
+      "sha256": "1a337b96a622047681773912ce708b99c3126dbba0d6a2576be6545c76223642",
+      "size": 12591,
+      "tracked": true
+    },
+    {
+      "path": "tests/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size": 0,
+      "tracked": true
+    },
+    {
+      "path": "tests/conftest.py",
+      "sha256": "fe08e9298d42b92b20708a8fe3e1b2d42146ba1edf23604acbd8c4f8337efb08",
+      "size": 3063,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_bayesian.py",
+      "sha256": "18c69ef32af763a910bef2ff235d3d5a3486995120e24a4203e0337271366492",
+      "size": 6872,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_constitutive_models.py",
+      "sha256": "a0daab4f2e7daab57fbfff4aac0ed9e4cda75dd8ba8a53b1ff08815fe6d86b2b",
+      "size": 2996,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_extensional.py",
+      "sha256": "5125a96a53bb6b795ea6e5622150de4530e187fe36d57ba9c2148be8b8fa4c8d",
+      "size": 5717,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_forcing.py",
+      "sha256": "33a4d290958b376775b0fb6ae30020ba30b5e54af512b3155a1dabd7128e90f9",
+      "size": 7521,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_information.py",
+      "sha256": "a2f28521379f52b3a514b9bf1bb269f6c9cb1a46671b157da859ae6f154ae7a9",
+      "size": 38364,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_multimode.py",
+      "sha256": "b12e3dd3f1769be5d3ba77c1c1572e9856687ed6c3e359e88493deee9c45d08f",
+      "size": 12543,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_normal_stress_signs.py",
+      "sha256": "6cb7e7c616c9331be8108242c1942d930d97e04604931832c8017294964b34fc",
+      "size": 4027,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_parameters.py",
+      "sha256": "324b212a5ea2b4ba268a10c116917080675ba0427919c2745818817eae2079b5",
+      "size": 3454,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_protocols.py",
+      "sha256": "32a78f95bcab211718f5d45bab81939d3efbc0191d2bd7f0f84bcbb2245a72a4",
+      "size": 9576,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_rheometer.py",
+      "sha256": "7f90dd85d637dfe0408e5f3953ae49d798e7f9a1e6034770975c0f244e4e47a5",
+      "size": 9839,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_solver.py",
+      "sha256": "c10cf8ee07822b8da8ae2c20b8a75928299e1866d0c26016f96192a82a635d58",
+      "size": 3575,
+      "tracked": true
+    },
+    {
+      "path": "tests/test_viscoelastic_models.py",
+      "sha256": "1a7c5d11cfb12dd03165ad4c1976d85d63598050390c724e35ea57811ef76beb",
+      "size": 13842,
+      "tracked": true
+    },
+    {
+      "path": "tests/utils.py",
+      "sha256": "272744d720eda0b246050cdb241e2b8104b3589ff2358f5b7ba306ef4a7f2545",
+      "size": 2539,
+      "tracked": true
+    }
+  ],
+  "production_battery_sha256": "3117c06c9a8cdc8f183c048b1e81db020b033a2395f7a6da46094e31a7d37050"
+}

@@ -1,0 +1,32 @@
+# Giesekus contraction training run, scheme s1 (Fig. 5).
+# historical campaign: gie_prod_rerun (frozen run tag gie_A_s1)
+# Launched by slurm/run_giesekus_contraction.sh; see the Fig. 5 row of REPRODUCE.md.
+# x64 true is required by the contraction trainer.
+experiment: contraction_train
+x64: true
+truth_model: giesekus
+scheme: s1
+loss_weight: roi
+truth_gp: 3.2
+truth_lam: 0.7
+truth_nus: 0.8
+truth_alpha: 0.3
+gp_init: 1.0
+lam_init: 1.0
+nus_init: 1.0
+U: 0.5
+nx: 128
+ny: 256
+dt: 1.0e-4
+inner_steps: 50
+outer_steps: 400
+ramp_time: 0.7
+learning_rate: 1.0e-4
+w_p: 0
+checkpoint_every: 25
+width: 32
+depth: 2
+seed: 0
+time_budget_s: 147600
+out_dir: ./work/giesekus_contraction
+run_name: null

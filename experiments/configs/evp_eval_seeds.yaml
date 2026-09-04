@@ -1,0 +1,6 @@
+# Elastoviscoplastic evaluation across the five training seeds.
+# Runs campaigns/evp_fix_seed_eval.py; see the Supplementary Figs. S14-S15 row of REPRODUCE.md.
+# x64 true is required by the evaluation runner.
+experiment: evp_eval
+x64: true
+wrapper: seeds

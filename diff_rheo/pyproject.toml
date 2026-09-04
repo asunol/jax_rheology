@@ -1,0 +1,48 @@
+[project]
+name = "diff-rheo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+
+# Main dependencies (from install_requires)
+dependencies = [
+    "jax>=0.4.37",
+    "jaxlib>=0.4.36",
+    "equinox>=0.11.10",
+    "diffrax>=0.6.1",
+    "optax",
+    "numpy>=2.2.0",
+    "scipy>=1.14.1",
+    "matplotlib>=3.9.3",
+    "jupyter>=1.1.1",
+    "tqdm>=4.67.1",
+    "colorama>=0.4.6",
+]
+
+# Optional extras.  `bayesian` powers diff_rheo._bayesian (NUTS posterior
+# sampling + WAIC / PSIS-LOO model comparison); the package imports numpyro /
+# arviz lazily, so the core library works without this extra installed.
+#
+# arviz is pinned <1.0 on purpose: ArviZ 1.x is a modular rewrite that REMOVED
+# `az.waic` outright and changed the `az.compare` / `from_numpyro` / ELPDData
+# APIs that _bayesian.py depends on.  Do not lift this cap without migrating
+# that module first.
+[project.optional-dependencies]
+bayesian = [
+    "numpyro>=0.15",
+    "arviz>=0.18,<1.0",
+]
+
+gpu = [
+    "jax[cuda12]",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

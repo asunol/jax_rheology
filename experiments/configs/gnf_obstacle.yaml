@@ -1,0 +1,11 @@
+# Generalized-Newtonian obstacle-channel truth solve; a verification input, not a published panel.
+# Production trajectory sha256 306787cd...d213.
+# x64 false: production trajectories are float32; pinned so a shell JAX_ENABLE_X64 cannot change the hash.
+experiment: gnf_truth
+x64: false
+geometry: obstacle
+model: carreau_yasuda
+params: [0.02, 1.0, 5.0, 0.5, 2.0]
+no_plots: true
+inner_steps: 2
+outer_steps: 1

@@ -1,0 +1,13 @@
+# Generalized-Newtonian constriction truth solve at n=0.5; the input to the gnf check.
+# Production trajectory sha256 d15f9491...f1628; see the Fig. 2 row of REPRODUCE.md.
+# x64 false: production trajectories are float32; pinned so a shell JAX_ENABLE_X64 cannot change the hash.
+experiment: gnf_truth
+x64: false
+geometry: constriction
+model: carreau_yasuda
+params: [0.02, 1.0, 5.0, 0.5, 2.0]
+no_plots: true
+pressure_gradient: 5.0
+dt: 1.0e-5
+inner_steps: 200
+outer_steps: 100

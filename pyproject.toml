@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jax_rheology"
+version = "0.1.0"
+description = "Differentiable rheology in JAX: finite-volume solvers for generalized-Newtonian and viscoelastic flow, tensor-basis neural-network constitutive closures, and training utilities."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Alp M. Sunol" },
+    { name = "James Roggeveen" },
+]
+keywords = [
+    "rheology",
+    "constitutive modeling",
+    "differentiable simulation",
+    "computational fluid dynamics",
+    "jax",
+]
+classifiers = [
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+# Lower bounds are the versions the paper results were produced with. The exact
+# pinned environments, including the CUDA build of jaxlib, are in
+# environment.yml (solvers and training) and environment_diff_rheo.yml
+# (rheometry fitting).
+dependencies = [
+    "jax>=0.4.23",
+    "jaxlib>=0.4.23",
+    "flax>=0.8.1",
+    "optax>=0.1.9",
+    "numpy>=1.26.4",
+    "scipy>=1.12.0",
+    "matplotlib>=3.8.3",
+    "pandas>=2.2.1",
+    "h5py>=3.11.0",
+    "PyYAML>=6.0.1",
+]
+
+[project.optional-dependencies]
+# The bulk-rheometry model selection (diff_rheo) integrates ODEs with diffrax.
+rheometry = [
+    "diffrax>=0.7.0",
+    "equinox>=0.13.0",
+]
+
+[project.urls]
+Paper = "https://arxiv.org/abs/2510.24673"
+Data = "https://doi.org/10.5281/zenodo.22184699"
+
+# Only the library is packaged. The vendored jax-cfd, jax_ib, and diff_rheo
+# trees are used in place from the repository root and are not installed here.
+[tool.setuptools]
+py-modules = ["repo_paths"]
+packages = [
+    "jax_rheology",
+    "jax_rheology.core",
+    "jax_rheology.diagnostics",
+    "jax_rheology.forward",
+    "jax_rheology.geometries",
+    "jax_rheology.io",
+    "jax_rheology.models",
+    "jax_rheology.solvers",
+    "jax_rheology.training",
+]

@@ -1,0 +1,7 @@
+# Forward-only elastoviscoplastic diagnostics (no training).
+# Runs campaigns/evp_forward_diag.py.
+# x64 true is required by the forward-diagnostics runner.
+experiment: evp_forward
+x64: true
+wrapper: diag
+mode: b0
